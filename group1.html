@@ -44,7 +44,7 @@
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(showPosition, showError);
                     } else {
-                        locationStatus.textContent = 'Geolocation is not supported by your browser.';
+                        locationStatus.textContent = 'geolocation is not supported by your browser.';
                     }
                 });
             }
@@ -54,8 +54,8 @@
         function showPosition(position) {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
-            locationStatus.textContent = `Latitude: ${latitude.toFixed(4)}, Longitude: ${longitude.toFixed(4)}`;
-            console.log("Location obtained successfully.");
+            locationStatus.textContent = `latitude: ${latitude.toFixed(4)}, longitude: ${longitude.toFixed(4)}`;
+            console.log("lsocation obtained successfully.");
             
             // Now that we have the coordinates, you can update them globally for other functions
             window.latitude = latitude;
@@ -92,9 +92,9 @@
         function togglePlayPause() {
             const playButton = document.getElementById('playButton');
             if (playButton.src.includes('playButton.png')) {
-                playButton.src = '../static/images/pauseButton.png';
+                playButton.src = 'static/images/pauseButton.png';
             } else {
-                playButton.src = '../static/images/playButton.png';
+                playButton.src = 'static/images/playButton.png';
             }
         }
     </script>
