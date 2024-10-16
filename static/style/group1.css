@@ -1,0 +1,122 @@
+@font-face {
+    font-family: 'futura';
+    src: url('../fonts/FuturaPTMedium.otf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'futura';
+    src: url('../fonts/FuturaPTLight.otf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* general body styles */
+body {
+    background-color: #ddebee;
+    font-family: 'futura';
+    font-weight: 800;
+}
+
+h1 {
+    color: #34495e;
+    font-weight: 800;
+    margin-left: 5%;
+    font-size: 64px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+}
+
+.play-button {
+    width: 20vw;  
+    height: 20vw; 
+    cursor: pointer;
+    margin-left: 20%; 
+}
+
+.play-image {
+    width: 35vw;  
+    height: 35vw; 
+    object-fit: cover;
+    margin-left: 5%;
+    border-radius: 20px;
+}
+
+.control-buttons {
+    display: flex;
+    align-items: center;  /* align images vertically */
+}
+
+/* container styles */
+#controls {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    padding: 20px;
+    background-color: #cbdce1;
+    border-radius: 20px;
+    height: 50vh;
+    width: 85vw;
+    margin-top: 10vh; 
+    margin-left: 5%;
+    box-shadow: 0px 0px 8px #596a7b;
+}
+
+.back-button {
+    width: 7vh; 
+    height: auto; 
+    cursor: pointer;
+    margin-top: 20px; 
+    margin-left: 5%;   
+    position: relative; 
+    left: 2vw;  
+    top: 5vh;
+}
+
+button:hover {
+    background-color: #f6f4bd;
+}
+
+label {
+    font-size: 32px;
+    margin-top: 0px;
+    color: #34495e;
+}
+
+#canvasContainer {
+    background-color: transparent;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 20vh;
+}
+
+canvas {
+    border-radius: 10px;
+    background-color: transparent; 
+}
+
+.body-foot {
+    width: 100%;
+    background-color: #ddebee;
+    padding: 20px;
+    position: fixed; 
+    bottom: 0; 
+    text-align: center;
+}
+
+.foot-bottom {
+    margin-top: 10px;
+    width: 100%;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: 1200;
+    color: #34495e;
+    font-family: 'futura', Arial, sans-serif; 
+}
