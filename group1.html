@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>group 1</title>
+    <link rel="stylesheet" href="../static/style/group1.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tone@14.7.58/build/Tone.js"></script>
+</head>
+<body onload="setup()">
+
+    <img src="../static/images/return.png" alt="back to home" class="back-button" onclick="window.location.href='index.html'">
+
+    <!-- controls container -->
+    <div id="controls">
+        <h1>group 1</h1>
+        <!-- play and stop buttons -->
+        <div class="control-buttons">
+            <img src="../static/images/image1.png" alt="group 1 play" class="play-image">
+            <img id="playButton" src="../static/images/playButton.png" alt="play" class="play-button" onclick="togglePlayPause()">
+        </div>
+        <!-- canvas for displaying GPS data -->
+        <div id="canvasContainer"></div>
+    </div>
+
+    <!-- footer -->
+    <footer class="body-foot">
+        <div class="foot-bottom">
+            &copy; Sound Studies Group, SUSTech, 2024
+        </div>
+    </footer>   
+
+    <!-- references -->
+    <script src="../static/js/playFiles1.js"></script> 
+    <script src="../static/js/gpsTracker.js"></script> 
+    <script>
+        // add event listener to enable location button
+        document.addEventListener('DOMContentLoaded', function () {
+            const enableLocationButton = document.getElementById('enableLocationButton');
+            const locationStatus = document.getElementById('locationStatus');
+
+            if (enableLocationButton) {
+                enableLocationButton.addEventListener('click', function () {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(showPosition, showError);
+                    } else {
+                        locationStatus.textContent = 'Geolocation is not supported by your browser.';
+                    }
+                });
+            }
+        });
+
+        // Success callback for geolocation
+        function showPosition(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+            locationStatus.textContent = `Latitude: ${latitude.toFixed(4)}, Longitude: ${longitude.toFixed(4)}`;
+            console.log("Location obtained successfully.");
+            
+            // Now that we have the coordinates, you can update them globally for other functions
+            window.latitude = latitude;
+            window.longitude = longitude;
+
+            // Optionally trigger handleLocationChange if you need to start audio based on location
+            if (typeof handleLocationChange === 'function') {
+                handleLocationChange(latitude, longitude);
+            }
+        }
+
+        // Error callback for geolocation
+        function showError(error) {
+            let errorMessage;
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMessage = 'User denied the request for geolocation. Please enable it in your browser settings.';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMessage = 'Location information is unavailable.';
+                    break;
+                case error.TIMEOUT:
+                    errorMessage = 'The request to get user location timed out.';
+                    break;
+                case error.UNKNOWN_ERROR:
+                    errorMessage = 'An unknown error occurred.';
+                    break;
+            }
+            const locationStatus = document.getElementById('locationStatus');
+            locationStatus.textContent = errorMessage;
+        }
+
+        // Modified togglePlayPause to reflect changes for location access
+        function togglePlayPause() {
+            const playButton = document.getElementById('playButton');
+            if (playButton.src.includes('playButton.png')) {
+                playButton.src = '../static/images/pauseButton.png';
+            } else {
+                playButton.src = '../static/images/playButton.png';
+            }
+        }
+    </script>
+</body>
+</html>

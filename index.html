@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>audio guide prototype</title>
+    <link rel="stylesheet" href="../static/style/index.css">
+</head>
+<body>
+
+    <!-- preload icon -->
+    <div id="preloadIconContainer">
+        <button id="preloadIcon">
+            <img src="../static/images/preload.png" alt="Preload Icon" class="preload-image">
+            preload
+        </button>
+    </div>  
+
+    <!-- navigation buttons to groups' pages -->
+    <!-- change the group name to desired location name -->
+    <!-- change the image to desired image -->
+    <div id="navigation">
+        <a href="group1.html" class="group-link">
+            <div class="group-container">
+                <img src="../static/images/image1.png" alt="group 1 image" class="group-image">
+                <div class="group-content">group 1</div>
+            </div>
+        </a>
+        <a href="group2.html" class="group-link">
+            <div class="group-container">
+                <img src="../static/images/image2.png" alt="group 2 image" class="group-image">
+                <div class="group-content">group 2</div>
+            </div>
+        </a>
+        <a href="group3.html" class="group-link">
+            <div class="group-container">
+                <img src="../static/images/image3.png" alt="group 3 image" class="group-image">
+                <div class="group-content">group 3</div>
+            </div>
+        </a>
+        <a href="group4.html" class="group-link">
+            <div class="group-container">
+                <img src="../static/images/image4.png" alt="group 4 image" class="group-image">
+                <div class="group-content">group 4</div>
+            </div>
+        </a>
+    </div>
+    
+
+    <footer class="body-foot">
+        <div class="foot-bottom">
+            &copy; Sound Studies Group, SUSTech, 2024
+        </div>
+    </footer>    
+
+    <!-- main script -->
+    <script>
+        // list your array of audio files to be preloaded
+        const audioFiles = [
+            "../static/audio/track1.mp3",
+            "../static/audio/track2.mp3",
+            "../static/audio/track3.mp3",
+            "../static/audio/track4.mp3",
+            "../static/audio/track5.mp3",
+            "../static/audio/track6.mp3",
+            "../static/audio/background1.mp3",
+            "../static/audio/background2.mp3",
+            "../static/audio/background3.mp3",
+            "../static/audio/background4.mp3"
+            // add more below...
+        ];
+        
+        const preloadedAudio = [];
+
+        // function to preload the audio files
+        function preloadAudio() {
+            audioFiles.forEach((file, index) => {
+                const audio = new Audio(file);
+                audio.preload = "auto";
+                preloadedAudio[index] = audio;
+            });
+            console.log("audio files preloaded.");
+        }
+
+        // add an event listener to the preload button to call the preloadAudio function
+        document.addEventListener('DOMContentLoaded', function () {
+            let preloadButton = document.getElementById('preloadIcon');
+            if (preloadButton) {
+                preloadButton.addEventListener('click', preloadAudio);
+            } else {
+                console.error("preload button not found in the DOM.");
+            }
+        });
+    </script>
+</body>
+</html>
