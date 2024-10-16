@@ -1,6 +1,6 @@
 This Audio Guide prototype for YuanLing Street includes a step-by-step tutorial on uploading your work to the application.
 
-1. Upload Your Audio Files
+*1. Upload Your Audio Files*
 Inside 'static', you could upload your sound design files to 'audio'. As an example, when you upload 'track1.mp3', it needs to be preloaded in the home page. To acheive that, add the files inside index.html as follows:
 
     const audioFiles = [
