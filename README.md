@@ -6,8 +6,7 @@ Inside 'static', you could upload your sound design files to 'audio'. As an exam
 
     const audioFiles = [
         "../static/audio/track1.mp3",
-         // add more below...
-   
+         // add more below...   
     ];
 
 After that, the audio files needs to be assigned to the related location inside playFile.js:
