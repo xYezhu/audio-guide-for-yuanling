@@ -5,7 +5,8 @@ Inside 'static', you could upload your sound design files to 'audio'. As an exam
 
     const audioFiles = [
    
-    "../static/audio/track1.mp3", // add more below...
+    "../static/audio/track1.mp3",
+     // add more below...
    
     ];
 
