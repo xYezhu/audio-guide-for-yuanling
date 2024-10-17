@@ -5,7 +5,6 @@ function setup() {
     // create the canvas for displaying GPS data
     const canvas = createCanvas(windowWidth * 0.8, windowHeight * 0.2);
     canvas.parent('canvasContainer');
-    textFont(futuraFont);
     textSize(48);
     textStyle(BOLD);
     fill('#34495e');
@@ -29,7 +28,6 @@ function draw() {
     // display the current GPS coordinates
     if (latitude !== undefined && longitude !== undefined) {
         textSize(45);
-        textFont(futuraFont);
         fill('#34495e');
         text(`latitude: ${latitude.toFixed(4)}`, 10, height * 0.1);
         text(`longitude: ${longitude.toFixed(4)}`, 10, height * 0.25);
