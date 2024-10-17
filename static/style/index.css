@@ -1,16 +1,4 @@
-/* font face */
-@font-face {
-    font-family: 'futura';
-    src: url('../fonts/FuturaPTMedium.otf') format('truetype');
-    font-weight: 900; /* bold */
-    font-style: normal;
-}
-@font-face {
-    font-family: 'futura';
-    src: url('../fonts/FuturaPTLight.otf') format('truetype');
-    font-weight: 400; /* standard */
-    font-style: normal;
-}
+
 
 .group-container {
     display: flex;
@@ -32,7 +20,7 @@
     background-color: transparent;
     border: none;
     font-size: 56px; 
-    font-family: 'futura', Arial, sans-serif;
+    font-family: Arial, sans-serif;
     color: #34495e; 
     text-align: right;
     padding: 0; 
@@ -60,7 +48,7 @@ body {
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    font-family: 'futura', Arial, sans-serif; 
+    font-family: Arial, sans-serif; 
     margin: 0;
     padding: 0;
     display: flex;
@@ -129,7 +117,7 @@ label {
     cursor: pointer;
     border: none; 
     background: none;
-    font-family: 'futura'; 
+    font-family: Arial, sans-serif;
 }
 
 #preloadIcon:hover {
@@ -160,5 +148,5 @@ label {
     font-size: 1.5em;
     font-weight: 900;
     color: #34495e;
-    font-family: 'futura', Arial, sans-serif; 
+    font-family: Arial, sans-serif;
 }
