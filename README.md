@@ -1,4 +1,4 @@
-This Audio Guide prototype for YuanLing Street includes a step-by-step tutorial on uploading your work to the application.
+This audio guide prototype for YuanLing Street includes a step-by-step tutorial on uploading your work to the application.
 
 **1. Upload your audio files**
 
