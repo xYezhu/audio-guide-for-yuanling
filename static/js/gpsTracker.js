@@ -3,7 +3,7 @@ let latitude, longitude; // define globally for use across functions
 let futuraFont; // load the font
 
 function preload() {
-    futuraFont = loadFont('static/fonts/FuturaPTMedium.otf');
+    futuraFont = loadFont('../fonts/FuturaPTMedium.otf');
 }
 
 function setup() {
