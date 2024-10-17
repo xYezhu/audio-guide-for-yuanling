@@ -29,8 +29,8 @@ function draw() {
     if (latitude !== undefined && longitude !== undefined) {
         textSize(45);
         fill('#34495e');
-        text(`latitude: ${latitude.toFixed(4)}`, 10, height * 0.1);
-        text(`longitude: ${longitude.toFixed(4)}`, 10, height * 0.25);
+        text(`latitude: ${latitude.toFixed(4)}`, 10, height * 0.25);
+        text(`longitude: ${longitude.toFixed(4)}`, 10, height * 0.4);
     } else {
         text('waiting for GPS data...', 10, height * 0.1);
     }

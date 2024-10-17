@@ -10,12 +10,12 @@ let fadeInDuration = 2000; // set fade-in time to 2000 ms (2 seconds), or any va
 let fadeOutDuration = 2000; // set fade-out time to 2000 ms (2 seconds),  or any value you prefer
 let currentlyPlayingLocation = null; // track which location's track is currently playing
 let tracks = {
-    "location1": "/static/audio/track1.mp3",
-    "location2": "/static/audio/track2.mp3",
-    "location3": "/static/audio/track3.mp3",
-    "location4": "/static/audio/track4.mp3",
-    "location5": "/static/audio/track5.mp3",
-    "location6": "/static/audio/track6.mp3"
+    "location1": "static/audio/track1.mp3",
+    "location2": "static/audio/track2.mp3",
+    "location3": "static/audio/track3.mp3",
+    "location4": "static/audio/track4.mp3",
+    "location5": "static/audio/track5.mp3",
+    "location6": "static/audio/track6.mp3"
     // add more below...
 };
 
@@ -26,7 +26,7 @@ let backgroundTrack = null;
 function startBackgroundTrack() {
     if (!backgroundTrack) {
         backgroundTrack = new Tone.Player({
-            url: "/static/audio/background1.mp3", 
+            url: "static/audio/background1.mp3", 
             autostart: false,
             loop: true,
             onload: () => {
