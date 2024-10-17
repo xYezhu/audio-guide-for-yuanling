@@ -1,20 +1,7 @@
-@font-face {
-    font-family: 'futura';
-    src: url('../fonts/FuturaPTMedium.otf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'futura';
-    src: url('../fonts/FuturaPTLight.otf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
 /* general body styles */
 body {
     background-color: #ddebee;
-    font-family: 'futura';
+    font-family: Arial, sans-serif;
     font-weight: 800;
 }
 
@@ -67,13 +54,13 @@ button {
 }
 
 .back-button {
-    width: 5vh; 
+    width: 7vh; 
     height: auto; 
     cursor: pointer;
     margin-top: 20px; 
     margin-left: 5%;   
     position: relative; 
-    left: 0;  
+    left: 2vw;  
     top: 5vh;
 }
 
@@ -118,5 +105,5 @@ canvas {
     font-size: 1.5em;
     font-weight: 1200;
     color: #34495e;
-    font-family: 'futura', Arial, sans-serif; 
+    font-family: Arial, sans-serif; 
 }

@@ -1,7 +1,5 @@
 let audioContextStarted = false; // flag to check if audio context is started
 let latitude, longitude; // define globally for use across functions
-let futuraFont; // load the font
-
 
 function setup() {
     // create the canvas for displaying GPS data
