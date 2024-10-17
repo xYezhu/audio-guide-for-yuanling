@@ -42,17 +42,14 @@ function startBackgroundTrack() {
     }
 }
 
-// function to start/stop playback via button click
 async function togglePlayback() {
     let playButton = document.getElementById('playButton');
 
     if (isPlaying) {
-        // if currently playing, stop all tracks including the background track
         stopAllPlayback();
         playButton.textContent = "play";
         isPlaying = false;
     } else {
-        // start playback
         userInitiatedPlayback = true;
         isPlaying = true;
         playButton.textContent = "stop";
@@ -64,12 +61,25 @@ async function togglePlayback() {
         // start the background track
         startBackgroundTrack();
 
-        // start the track corresponding to the current location if available
-        if (latitude !== undefined && longitude !== undefined) {
-            window.handleLocationChange(latitude, longitude);
-        }
+        // **Add the following block here**
+        navigator.geolocation.watchPosition(
+            (position) => {
+                let latitude = position.coords.latitude;
+                let longitude = position.coords.longitude;
+                window.handleLocationChange(latitude, longitude);
+            },
+            (error) => {
+                console.error('Error getting GPS location:', error);
+            },
+            {
+                enableHighAccuracy: true,
+                maximumAge: 10000,
+                timeout: 5000
+            }
+        );
     }
 }
+
 
 // function to stop all playback including background
 function stopAllPlayback() {
