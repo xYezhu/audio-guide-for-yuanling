@@ -22,7 +22,7 @@ function windowResized() {
 }
 
 function draw() {
-    background('cbdce1'); 
+    background('#cbdce1'); 
     textStyle(BOLD);
     textAlign(LEFT, CENTER);
 
