@@ -38,19 +38,14 @@ To change your group project name, navigate to index.html, find the navigation b
 
 before:
 
-    <div class="group-container">
-        <img src="static/images/image1.png" alt="group 1 image" class="group-image">
         <div class="group-content">group 1</div>
-    </div>
     
 
 
 after:
 
-    <div class="group-container">
-        <img src="static/images/image1.png" alt="group 1 image" class="group-image">
         <div class="group-content">yuan ling street</div>
-    </div>
+        
 
 
 
