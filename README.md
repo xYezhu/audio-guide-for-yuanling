@@ -28,9 +28,11 @@ To define your specific location, modify the code in handleLocationChange functi
             ...        
     }
     
-**3. Upload your Images**
+**3. Upload your images**
 
 To upload your own group image, simply swap the image inside image folder. Note: please keep the name of your image as image1-4, following your group number.
+
+**4. Change the group name**
 
 
 
