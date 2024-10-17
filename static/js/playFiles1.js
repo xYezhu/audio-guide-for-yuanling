@@ -61,7 +61,6 @@ async function togglePlayback() {
         // start the background track
         startBackgroundTrack();
 
-        // **Add the following block here**
         navigator.geolocation.watchPosition(
             (position) => {
                 let latitude = position.coords.latitude;
