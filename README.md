@@ -36,15 +36,16 @@ To upload your own group image, simply swap the image inside image folder. Note:
 
 To change your group project name, navigate to index.html, find the navigation buttons. As an example, if you want to change 'group1' to 'yuan ling street', modify it as below;
 
-before:
+**before:**
 
     <div class="group-container">
         <img src="static/images/image1.png" alt="group 1 image" class="group-image">
         <div class="group-content">group 1</div>
     </div>
+    
 
 
-after:
+**after:**
 
     <div class="group-container">
         <img src="static/images/image1.png" alt="group 1 image" class="group-image">
