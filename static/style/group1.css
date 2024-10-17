@@ -1,20 +1,9 @@
-@font-face {
-    font-family: 'futura';
-    src: url('../fonts/FuturaPTMedium.otf') format('truetype');
-    font-weight: 900; /* bold */
-    font-style: normal;
-}
-@font-face {
-    font-family: 'futura';
-    src: url('../fonts/FuturaPTLight.otf') format('truetype');
-    font-weight: 400; /* standard */
-    font-style: normal;
-}
+
 
 /* general body styles */
 body {
     background-color: #ddebee;
-    font-family: 'futura';
+    font-family: Arial, sans-serif;
     font-weight: 800;
 }
 

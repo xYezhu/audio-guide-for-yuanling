@@ -44,7 +44,6 @@ function startBackgroundTrack() {
 }
 
 // function to start/stop playback via button click
-// function to start/stop playback via button click
 async function togglePlayback() {
     let playButton = document.getElementById('playButton');
 
