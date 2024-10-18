@@ -161,12 +161,18 @@ function handleLocationChange(latitude, longitude) {
     // define your location ranges and match with tracks here
     // explanation: &&: true if and only if all the operands are true
     // resources: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_AND
-    if (latitude > 22 && latitude < 23 && longitude > 113 && longitude < 114) {
-        playTrack(tracks["location1"], "location1");
-    } else if (latitude > 23 && latitude < 24 && longitude > 114 && longitude < 115) {
-        playTrack(tracks["location2"], "location2");
-    } else if (latitude > 24 && latitude < 25 && longitude > 115 && longitude < 116) {
-        playTrack(tracks["location3"], "location3");
+    if (latitude > 22.5960 && latitude < 23 && longitude > 113.9980 && longitude < 114) {
+        playTrack(tracks["location1"], "location1"); // in building, 3rd floor
+    } else if (latitude > 22.5955 && latitude < 22.5960 && longitude > 113.9980 && longitude < 113.9990) {
+        playTrack(tracks["location2"], "location2"); // outside the building, near the bin
+    } else if (latitude > 22.5930 && latitude < 22.5950 && longitude > 113.9970 && longitude < 113.9980) {
+        playTrack(tracks["location3"], "location3"); // towards baoneng shopping mall
+    } else if (latitude > 22.5920 && latitude < 22.5930 && longitude > 113.9935 && longitude < 113.9950) {
+        playTrack(tracks["location4"], "location4"); // saizeriya in baoneng shopping mall
+    } else if (latitude > 22.5920 && latitude < 22.5940 && longitude > 113.9930 && longitude < 113.9960) {
+        playTrack(tracks["location5"], "location5"); // mcdonald's in baoneng shopping mall
+    } else if (latitude > 22.5920 && latitude < 22.5930 && longitude > 113.9920 && longitude < 113.9940) {
+        playTrack(tracks["location6"], "location6"); // 711 outside baoneng shopping mall
     } else {
         console.log("no track assigned for this location.");
         // stop playback when leaving all defined zones
