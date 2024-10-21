@@ -24,23 +24,19 @@ let isPlaying = false; // only declare once to avoid conflicts
 let backgroundTrack = null;
 
 function startBackgroundTrack() {
-    if (!backgroundTrack) {
-        backgroundTrack = new Tone.Player({
-            url: "static/audio/background1.mp3", 
-            autostart: false,
-            loop: true,
-            onload: () => {
-                console.log("background track 1 loaded successfully.");
-                backgroundTrack.start();
-            },
-            onerror: (error) => {
-                console.error("error loading background track 1:", error);
-            }
-        }).toDestination();
+    const backgroundFile = "static/audio/background1.mp3"; 
+    if (window.preloadedAudio[backgroundFile]) {
+        backgroundTrack = window.preloadedAudio[backgroundFile];
+        if (backgroundTrack.state === 'stopped') {
+            backgroundTrack.loop = true;
+            backgroundTrack.start();
+            console.log("Background track started.");
+        }
     } else {
-        backgroundTrack.start();
+        console.error("Background track not preloaded correctly.");
     }
 }
+
 
 async function togglePlayback() {
     let playButton = document.getElementById('playButton');
@@ -50,6 +46,12 @@ async function togglePlayback() {
         playButton.textContent = "play";
         isPlaying = false;
     } else {
+        // wait until preloading is complete before proceeding
+        if (!window.preloadingComplete) {
+            console.error("Cannot start playback. Audio preloading not complete.");
+            return;
+        }
+
         userInitiatedPlayback = true;
         isPlaying = true;
         playButton.textContent = "stop";
@@ -82,80 +84,63 @@ async function togglePlayback() {
 
 // function to stop all playback including background
 function stopAllPlayback() {
-    // stop location-specific track
     if (currentTrack) {
-        console.log("stopping current track...");
-        currentTrack.volume.rampTo(-Infinity, fadeOutDuration / 1000); // fade out using fadeOutDuration
+        currentTrack.volume.rampTo(-Infinity, fadeOutDuration / 1000);
         setTimeout(() => {
             currentTrack.stop();
-            console.log("current track stopped.");
-            currentlyPlayingLocation = null;
             currentTrack = null;
+            currentlyPlayingLocation = null;
         }, fadeOutDuration);
     }
 
-    // stop background track if it exists
     if (backgroundTrack) {
-        console.log("stopping background track...");
-        backgroundTrack.stop(); // stop the background track without any fade
-        console.log("background track stopped.");
+        backgroundTrack.stop(); 
+        console.log("Background track stopped.");
     }
 
     userInitiatedPlayback = false;
+    isPlaying = false;
+    console.log("All playback stopped.");
 }
+
 
 // function to play a track with fade-in and fade-out
 async function playTrack(trackFile, locationKey) {
-    await userInteracted(); // ensure Tone.js audio context is started
-
-    if (currentTrack && currentlyPlayingLocation === locationKey) {
-        // if we are already playing the requested track, do nothing
-        console.log(`track for ${locationKey} is already playing.`);
-        return;
-    }
+    if (currentTrack && currentlyPlayingLocation === locationKey) return;
 
     if (currentTrack && currentlyPlayingLocation !== locationKey) {
-        // crossfade: fade out current track and start the new one
-        console.log('crossfading to new track...');
-        currentTrack.volume.rampTo(-Infinity, fadeOutDuration / 1000); // fade out using fadeOutDuration
+        console.log('Crossfading to new track...');
+        currentTrack.volume.rampTo(-Infinity, fadeOutDuration / 1000); 
         setTimeout(() => {
             currentTrack.stop();
-            console.log('previous track stopped.');
-            currentTrack = null; // clear the current track
-            startNewTrack(trackFile, locationKey); // start the new track after fading out the previous one
+            startNewTrack(trackFile, locationKey, true);
         }, fadeOutDuration);
     } else if (!currentTrack) {
-        // if no track is playing, directly start the new track
-        startNewTrack(trackFile, locationKey);
+        startNewTrack(trackFile, locationKey, true);
     }
 }
 
-// helper function to start a new track
-function startNewTrack(trackFile, locationKey) {
-    currentTrack = new Tone.Player({
-        url: trackFile,
-        autostart: false,
-        onload: () => {
-            console.log(`track ${trackFile} loaded successfully.`);
 
-            try {
-                if (currentTrack.buffer && currentTrack.buffer.loaded) {
-                    currentTrack.volume.value = -Infinity; // start from silence for fade-in
-                    currentTrack.start();
-                    currentTrack.volume.rampTo(0, fadeInDuration / 1000); // fade-in to 0 dB using fadeInDuration
-                    console.log('playback started with fade-in.');
-                    currentlyPlayingLocation = locationKey; // update the currently playing location
-                } else {
-                    console.error('buffer not loaded correctly, unable to start playback.');
-                }
-            } catch (err) {
-                console.error('error during playback initiation:', err);
-            }
-        },
-        onerror: (error) => {
-            console.error("error loading track:", error);
+// function to start a new track with optional fade-in
+function startNewTrack(trackFile, locationKey, fadeIn = false) {
+    if (window.preloadedAudio[trackFile]) {
+        currentTrack = window.preloadedAudio[trackFile];
+        currentTrack.loop = false;
+
+        if (fadeIn) {
+            currentTrack.volume.value = -Infinity; 
+            currentTrack.start();
+            currentTrack.volume.rampTo(0, fadeInDuration / 1000); 
+            console.log('New track started with fade-in.');
+        } else {
+            currentTrack.start(); 
         }
-    }).toDestination();
+
+        currentlyPlayingLocation = locationKey;
+        console.log(`Playing track: ${trackFile}`);
+    } else {
+        console.error(`Track ${trackFile} not preloaded correctly.`);
+    }
 }
 
 // function to determine which track to play based on GPS coordinates
