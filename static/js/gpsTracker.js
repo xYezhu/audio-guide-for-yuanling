@@ -3,7 +3,6 @@ let latitude, longitude; // define globally for use across functions
 let prevLatitude, prevLongitude;
 let changeThreshold = 0.0001; // minimum change to trigger playback adjustment
 
-
 function setup() {
     // create the canvas for displaying GPS data
     const canvas = createCanvas(windowWidth * 0.8, windowHeight * 0.2);
@@ -54,11 +53,16 @@ function updatePosition(position) {
         Math.abs(latitude - prevLatitude) > changeThreshold || 
         Math.abs(longitude - prevLongitude) > changeThreshold) {
             
-        handleLocationChange(latitude, longitude);
+        // Use window.handleLocationChange
+        if (typeof window.handleLocationChange === 'function') {
+            window.handleLocationChange(latitude, longitude);
+        } else {
+            console.error('handleLocationChange is not defined.');
+        }
+
         prevLatitude = latitude;
         prevLongitude = longitude;
     }
-    
 }
 
 // error handling function
