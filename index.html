@@ -17,7 +17,7 @@
     <script>
 
     window.preloadedAudio = {}; // make it globally accessible
-    let preloadingComplete = false; // flag for preloading status
+    window.preloadingComplete = false;  // flag for preloading status
 
     const audioFiles = [
         "static/audio/track1.mp3",
@@ -43,7 +43,7 @@
                     console.log(`${file} preloaded.`);
                     loadedCount++;
                     if (loadedCount === audioFiles.length) {
-                        preloadingComplete = true; // set flag to true when all files are loaded
+                        window.preloadingComplete = true; // set flag to true when all files are loaded
                         console.log("All audio files preloaded.");
                     }
                 },

@@ -26,7 +26,7 @@ let backgroundTrack = null;
 function startBackgroundTrack() {
     const backgroundFile = "static/audio/background1.mp3"; // background track
 
-    if (!preloadingComplete) {
+    if (!window.preloadingComplete) {
         console.error("Audio preloading not complete. Background track cannot be started.");
         return;
     }
@@ -42,7 +42,7 @@ function startBackgroundTrack() {
 }
 
 function startNewTrack(trackFile, locationKey, fadeIn = false) {
-    if (!preloadingComplete) {
+    if (!window.preloadingComplete) {
         console.error("Audio preloading not complete. Cannot start new track.");
         return;
     }
@@ -67,7 +67,6 @@ function startNewTrack(trackFile, locationKey, fadeIn = false) {
     }
 }
 
-
 async function togglePlayback() {
     let playButton = document.getElementById('playButton');
 
@@ -77,7 +76,7 @@ async function togglePlayback() {
         isPlaying = false;
     } else {
         // wait until preloading is complete before proceeding
-        if (!preloadingComplete) {
+        if (!window.preloadingComplete) {
             console.error("Cannot start playback. Audio preloading not complete.");
             return;
         }
