@@ -25,6 +25,12 @@ let backgroundTrack = null;
 
 function startBackgroundTrack() {
     const backgroundFile = "static/audio/background1.mp3"; // background track
+
+    if (!preloadingComplete) {
+        console.error("Audio preloading not complete. Background track cannot be started.");
+        return;
+    }
+
     if (window.preloadedAudio[backgroundFile] && window.preloadedAudio[backgroundFile].buffer && window.preloadedAudio[backgroundFile].buffer.loaded) {
         backgroundTrack = window.preloadedAudio[backgroundFile];
         backgroundTrack.loop = true;
@@ -36,6 +42,11 @@ function startBackgroundTrack() {
 }
 
 function startNewTrack(trackFile, locationKey, fadeIn = false) {
+    if (!preloadingComplete) {
+        console.error("Audio preloading not complete. Cannot start new track.");
+        return;
+    }
+
     if (window.preloadedAudio[trackFile] && window.preloadedAudio[trackFile].buffer && window.preloadedAudio[trackFile].buffer.loaded) {
         currentTrack = window.preloadedAudio[trackFile];
         currentTrack.loop = false; // ensure it doesn't loop
@@ -56,6 +67,7 @@ function startNewTrack(trackFile, locationKey, fadeIn = false) {
     }
 }
 
+
 async function togglePlayback() {
     let playButton = document.getElementById('playButton');
 
@@ -64,6 +76,12 @@ async function togglePlayback() {
         playButton.textContent = "play";
         isPlaying = false;
     } else {
+        // wait until preloading is complete before proceeding
+        if (!preloadingComplete) {
+            console.error("Cannot start playback. Audio preloading not complete.");
+            return;
+        }
+
         userInitiatedPlayback = true;
         isPlaying = true;
         playButton.textContent = "stop";
