@@ -24,10 +24,14 @@ let isPlaying = false; // only declare once to avoid conflicts
 let backgroundTrack = null;
 
 function startBackgroundTrack() {
-    if (backgroundTrack && backgroundTrack.buffer && backgroundTrack.buffer.loaded) {
-        backgroundTrack.start(); // begin playing the background track instantly if it's loaded
+    const backgroundFile = "static/audio/background1.mp3"; // background track
+    if (preloadedAudio[backgroundFile] && preloadedAudio[backgroundFile].buffer && preloadedAudio[backgroundFile].buffer.loaded) {
+        backgroundTrack = preloadedAudio[backgroundFile];
+        backgroundTrack.loop = true;
+        backgroundTrack.start();
+        console.log("background track started from preloaded buffer.");
     } else {
-        console.log("background track not loaded yet."); 
+        console.error("background track not preloaded correctly.");
     }
 }
 
@@ -120,31 +124,27 @@ async function playTrack(trackFile, locationKey) {
     }
 }
 
-// helper function to start a new track with optional fade-in
+// function to start a new track with optional fade-in
 function startNewTrack(trackFile, locationKey, fadeIn = false) {
-    currentTrack = new Tone.Player({
-        url: trackFile,
-        autostart: false,
-        onload: () => {
-            console.log(`track ${trackFile} loaded successfully.`);
+    if (preloadedAudio[trackFile] && preloadedAudio[trackFile].buffer && preloadedAudio[trackFile].buffer.loaded) {
+        currentTrack = preloadedAudio[trackFile];
+        currentTrack.loop = false; // ensure it doesn't loop
 
-            if (fadeIn) {
-                currentTrack.volume.value = -Infinity; // start from silence for fade-in
-                currentTrack.start();
-                currentTrack.volume.rampTo(0, fadeInDuration / 1000); // fade-in to 0 dB using fadeInDuration
-                console.log('playback started with fade-in.');
-            } else {
-                currentTrack.start(); // start normally without fade-in
-            }
-
-            currentlyPlayingLocation = locationKey; // update the currently playing location
-        },
-        onerror: (error) => {
-            console.error("error loading track:", error);
+        if (fadeIn) {
+            currentTrack.volume.value = -Infinity; // start from silence for fade-in
+            currentTrack.start();
+            currentTrack.volume.rampTo(0, fadeInDuration / 1000); // fade-in to 0 dB using fadeInDuration
+            console.log('Playback started with fade-in.');
+        } else {
+            currentTrack.start(); // start normally without fade-in
         }
-    }).toDestination();
-}
 
+        currentlyPlayingLocation = locationKey; // update the currently playing location
+        console.log(`Track ${trackFile} playing.`);
+    } else {
+        console.error(`Track ${trackFile} not preloaded correctly.`);
+    }
+}
 
 // function to determine which track to play based on GPS coordinates
 function handleLocationChange(latitude, longitude) {
