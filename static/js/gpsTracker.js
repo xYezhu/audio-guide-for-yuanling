@@ -1,4 +1,3 @@
-let audioContextStarted = false; // flag to check if audio context is started
 let latitude, longitude; // define globally for use across functions
 let prevLatitude, prevLongitude;
 let changeThreshold = 0.0001; // minimum change to trigger playback adjustment
@@ -90,14 +89,14 @@ function showError(error) {
 }
 
 // start the audio context on the first user interaction
-async function userInteracted() {
-    if (!audioContextStarted) {
-        try {
-            await Tone.start();
-            audioContextStarted = true;
-            console.log('Audio context started.');
-        } catch (error) {
-            console.error('Failed to start audio context:', error);
-        }
-    }
-}
+// async function userInteracted() {
+//     if (!audioContextStarted) {
+//         try {
+//             await Tone.start();
+//             audioContextStarted = true;
+//             console.log('Audio context started.');
+//         } catch (error) {
+//             console.error('Failed to start audio context:', error);
+//         }
+//     }
+// }

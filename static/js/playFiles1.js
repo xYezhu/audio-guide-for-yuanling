@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } 
 });
 
-let audioContextStarted = false;
+window.audioContextStarted = window.audioContextStarted || false;
 let currentTrack = null;
 let fadeInDuration = 2000; // set fade-in time to 2000 ms (2 seconds), or any value you prefer
 let fadeOutDuration = 2000; // set fade-out time to 2000 ms (2 seconds),  or any value you prefer
@@ -23,6 +23,18 @@ let tracks = {
 let userInitiatedPlayback = false; // flag to determine if playback has been started by user
 let isPlaying = false; // only declare once to avoid conflicts
 let backgroundTrack = null;
+
+async function userInteracted() {
+    if (!window.audioContextStarted) {
+        try {
+            await Tone.start();
+            window.audioContextStarted = true;
+            console.log('Audio context started.');
+        } catch (error) {
+            console.error('Failed to start audio context:', error);
+        }
+    }
+}
 
 // background track
 function startBackgroundTrack() {
@@ -64,21 +76,21 @@ async function togglePlayback() {
         // start the background track
         startBackgroundTrack();
 
-        navigator.geolocation.watchPosition(
-            (position) => {
-                let latitude = position.coords.latitude;
-                let longitude = position.coords.longitude;
-                window.handleLocationChange(latitude, longitude);
-            },
-            (error) => {
-                console.error('error getting GPS location:', error);
-            },
-            {
-                enableHighAccuracy: true,
-                maximumAge: 10000,
-                timeout: 5000
-            }
-        );
+        // navigator.geolocation.watchPosition(
+        //     (position) => {
+        //         let latitude = position.coords.latitude;
+        //         let longitude = position.coords.longitude;
+        //         window.handleLocationChange(latitude, longitude);
+        //     },
+        //     (error) => {
+        //         console.error('error getting GPS location:', error);
+        //     },
+        //     {
+        //         enableHighAccuracy: true,
+        //         maximumAge: 10000,
+        //         timeout: 5000
+        //     }
+        // );
     }
 }
 
