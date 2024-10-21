@@ -51,8 +51,8 @@ function updatePosition(position) {
     if (typeof prevLatitude === 'undefined' || typeof prevLongitude === 'undefined' ||
         Math.abs(latitude - prevLatitude) > changeThreshold || 
         Math.abs(longitude - prevLongitude) > changeThreshold) {
-            
-        // Use window.handleLocationChange
+
+        // directly call handleLocationChange after ensuring it is defined
         if (typeof window.handleLocationChange === 'function') {
             window.handleLocationChange(latitude, longitude);
         } else {
@@ -63,6 +63,7 @@ function updatePosition(position) {
         prevLongitude = longitude;
     }
 }
+
 
 // error handling function
 function showError(error) {
@@ -84,19 +85,6 @@ function showError(error) {
     console.error(errorMessage);
     const canvasContainer = document.getElementById('canvasContainer');
     if (canvasContainer) {
-        canvasContainer.textContent = errorMessage; // Display error on the page
+        canvasContainer.textContent = errorMessage; // display error on the page
     }
 }
-
-// start the audio context on the first user interaction
-// async function userInteracted() {
-//     if (!audioContextStarted) {
-//         try {
-//             await Tone.start();
-//             audioContextStarted = true;
-//             console.log('Audio context started.');
-//         } catch (error) {
-//             console.error('Failed to start audio context:', error);
-//         }
-//     }
-// }

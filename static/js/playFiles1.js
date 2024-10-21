@@ -29,9 +29,9 @@ async function userInteracted() {
         try {
             await Tone.start();
             window.audioContextStarted = true;
-            console.log('Audio context started.');
+            console.log('sudio context started.');
         } catch (error) {
-            console.error('Failed to start audio context:', error);
+            console.error('failed to start audio context:', error);
         }
     }
 }
@@ -59,9 +59,9 @@ async function togglePlayback() {
         playButton.src = 'static/images/playButton.png';
         isPlaying = false;
     } else {
-        // wait until preloading is complete before proceeding
+        // ensure preloading is complete before proceeding
         if (!window.preloadingComplete) {
-            console.error("cannot start playback. Audio preloading not complete.");
+            console.error("cannot start playback. audio preloading not complete.");
             return;
         }
 
@@ -75,24 +75,9 @@ async function togglePlayback() {
 
         // start the background track
         startBackgroundTrack();
-
-        // navigator.geolocation.watchPosition(
-        //     (position) => {
-        //         let latitude = position.coords.latitude;
-        //         let longitude = position.coords.longitude;
-        //         window.handleLocationChange(latitude, longitude);
-        //     },
-        //     (error) => {
-        //         console.error('error getting GPS location:', error);
-        //     },
-        //     {
-        //         enableHighAccuracy: true,
-        //         maximumAge: 10000,
-        //         timeout: 5000
-        //     }
-        // );
     }
 }
+
 
 // function to stop all playback including background
 function stopAllPlayback(userStopped = false) {
@@ -159,11 +144,17 @@ function startNewTrack(trackFile, locationKey, fadeIn = false) {
     }
 }
 
+
 // function to determine which track to play based on GPS coordinates
 function handleLocationChange(latitude, longitude) {
     if (!userInitiatedPlayback) {
         // if playback has not been initiated by user, do nothing
         console.log("playback not initiated by user. Ignoring GPS location change.");
+        return;
+    }
+
+    if (!window.preloadingComplete) {
+        console.error("cannot begin playback, audio preloading not complete.");
         return;
     }
 
