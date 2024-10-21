@@ -25,13 +25,34 @@ let backgroundTrack = null;
 
 function startBackgroundTrack() {
     const backgroundFile = "static/audio/background1.mp3"; // background track
-    if (preloadedAudio[backgroundFile] && preloadedAudio[backgroundFile].buffer && preloadedAudio[backgroundFile].buffer.loaded) {
-        backgroundTrack = preloadedAudio[backgroundFile];
+    if (window.preloadedAudio[backgroundFile] && window.preloadedAudio[backgroundFile].buffer && window.preloadedAudio[backgroundFile].buffer.loaded) {
+        backgroundTrack = window.preloadedAudio[backgroundFile];
         backgroundTrack.loop = true;
         backgroundTrack.start();
-        console.log("background track started from preloaded buffer.");
+        console.log("Background track started from preloaded buffer.");
     } else {
-        console.error("background track not preloaded correctly.");
+        console.error("Background track not preloaded correctly.");
+    }
+}
+
+function startNewTrack(trackFile, locationKey, fadeIn = false) {
+    if (window.preloadedAudio[trackFile] && window.preloadedAudio[trackFile].buffer && window.preloadedAudio[trackFile].buffer.loaded) {
+        currentTrack = window.preloadedAudio[trackFile];
+        currentTrack.loop = false; // ensure it doesn't loop
+
+        if (fadeIn) {
+            currentTrack.volume.value = -Infinity; // start from silence for fade-in
+            currentTrack.start();
+            currentTrack.volume.rampTo(0, fadeInDuration / 1000); // fade-in to 0 dB using fadeInDuration
+            console.log('Playback started with fade-in.');
+        } else {
+            currentTrack.start(); // start normally without fade-in
+        }
+
+        currentlyPlayingLocation = locationKey; // update the currently playing location
+        console.log(`Track ${trackFile} playing.`);
+    } else {
+        console.error(`Track ${trackFile} not preloaded correctly.`);
     }
 }
 
@@ -124,27 +145,6 @@ async function playTrack(trackFile, locationKey) {
     }
 }
 
-// function to start a new track with optional fade-in
-function startNewTrack(trackFile, locationKey, fadeIn = false) {
-    if (preloadedAudio[trackFile] && preloadedAudio[trackFile].buffer && preloadedAudio[trackFile].buffer.loaded) {
-        currentTrack = preloadedAudio[trackFile];
-        currentTrack.loop = false; // ensure it doesn't loop
-
-        if (fadeIn) {
-            currentTrack.volume.value = -Infinity; // start from silence for fade-in
-            currentTrack.start();
-            currentTrack.volume.rampTo(0, fadeInDuration / 1000); // fade-in to 0 dB using fadeInDuration
-            console.log('Playback started with fade-in.');
-        } else {
-            currentTrack.start(); // start normally without fade-in
-        }
-
-        currentlyPlayingLocation = locationKey; // update the currently playing location
-        console.log(`Track ${trackFile} playing.`);
-    } else {
-        console.error(`Track ${trackFile} not preloaded correctly.`);
-    }
-}
 
 // function to determine which track to play based on GPS coordinates
 function handleLocationChange(latitude, longitude) {
