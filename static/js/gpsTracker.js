@@ -1,8 +1,5 @@
 let audioContextStarted = false; // flag to check if audio context is started
 let latitude, longitude; // define globally for use across functions
-let prevLatitude, prevLongitude;
-let changeThreshold = 0.0001; // minimum change to trigger playback adjustment
-
 
 function setup() {
     // create the canvas for displaying GPS data
@@ -14,11 +11,7 @@ function setup() {
 
     // check if geolocation is available in the browser
     if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(
-            updatePosition,
-            showError,
-            { enableHighAccuracy: true } // enable high accuracy for gps location
-        );
+        navigator.geolocation.watchPosition(updatePosition, showError);
     } else {
         text('geolocation is not supported by your browser.', 10, 20);
     }
@@ -49,49 +42,40 @@ function updatePosition(position) {
     latitude = position.coords.latitude;
     longitude = position.coords.longitude;
 
-    // Trigger handleLocationChange only if significant location change
-    if (typeof handleLocationChange === 'function' && 
-        (Math.abs(latitude - prevLatitude) > changeThreshold || 
-         Math.abs(longitude - prevLongitude) > changeThreshold)) {
-        
+    // call the handleLocationChange function to play the corresponding track
+    if (typeof handleLocationChange === 'function') {
         handleLocationChange(latitude, longitude);
-        prevLatitude = latitude;
-        prevLongitude = longitude;
+    } else {
+        console.error("handleLocationChange function is not defined.");
     }
 }
+
 // error handling function
 function showError(error) {
     let errorMessage;
     switch (error.code) {
         case error.PERMISSION_DENIED:
-            errorMessage = 'Geolocation permission denied. Enable it in settings.';
+            errorMessage = 'user denied the request for geolocation.';
             break;
         case error.POSITION_UNAVAILABLE:
-            errorMessage = 'Location information unavailable.';
+            errorMessage = 'location information is unavailable.';
             break;
         case error.TIMEOUT:
-            errorMessage = 'Request to get location timed out.';
+            errorMessage = 'the request to get user location timed out.';
             break;
-        default:
-            errorMessage = 'An unknown error occurred.';
+        case error.UNKNOWN_ERROR:
+            errorMessage = 'an unknown error occurred.';
+            break;
     }
-
-    console.error(errorMessage);
-    const canvasContainer = document.getElementById('canvasContainer');
-    if (canvasContainer) {
-        canvasContainer.textContent = errorMessage; // Display error on the page
-    }
+    console.log(errorMessage);
+    text(errorMessage, 10, height / 2);
 }
 
 // start the audio context on the first user interaction
 async function userInteracted() {
     if (!audioContextStarted) {
-        try {
-            await Tone.start();
-            audioContextStarted = true;
-            console.log('Audio context started.');
-        } catch (error) {
-            console.error('Failed to start audio context:', error);
-        }
+        await Tone.start();
+        audioContextStarted = true;
+        console.log('audio context started');
     }
 }
