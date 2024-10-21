@@ -11,7 +11,11 @@ function setup() {
 
     // check if geolocation is available in the browser
     if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(updatePosition, showError);
+        navigator.geolocation.watchPosition(
+            updatePosition,
+            showError,
+            { enableHighAccuracy: true } // enable high accuracy for gps location
+        );
     } else {
         text('geolocation is not supported by your browser.', 10, 20);
     }

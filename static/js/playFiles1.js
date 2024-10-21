@@ -24,21 +24,10 @@ let isPlaying = false; // only declare once to avoid conflicts
 let backgroundTrack = null;
 
 function startBackgroundTrack() {
-    if (!backgroundTrack) {
-        backgroundTrack = new Tone.Player({
-            url: "static/audio/background1.mp3", 
-            autostart: false,
-            loop: true,
-            onload: () => {
-                console.log("background track 1 loaded successfully.");
-                backgroundTrack.start();
-            },
-            onerror: (error) => {
-                console.error("error loading background track 1:", error);
-            }
-        }).toDestination();
+    if (backgroundTrack && backgroundTrack.buffer && backgroundTrack.buffer.loaded) {
+        backgroundTrack.start(); // begin playing the background track instantly if it's loaded
     } else {
-        backgroundTrack.start();
+        console.log("background track not loaded yet."); 
     }
 }
 
@@ -115,48 +104,47 @@ async function playTrack(trackFile, locationKey) {
     }
 
     if (currentTrack && currentlyPlayingLocation !== locationKey) {
-        // crossfade: fade out current track and start the new one
+        // crossfade: fade out the current track and start the new one
         console.log('crossfading to new track...');
         currentTrack.volume.rampTo(-Infinity, fadeOutDuration / 1000); // fade out using fadeOutDuration
         setTimeout(() => {
             currentTrack.stop();
             console.log('previous track stopped.');
             currentTrack = null; // clear the current track
-            startNewTrack(trackFile, locationKey); // start the new track after fading out the previous one
+            startNewTrack(trackFile, locationKey, true); // start the new track with fade-in
         }, fadeOutDuration);
     } else if (!currentTrack) {
-        // if no track is playing, directly start the new track
-        startNewTrack(trackFile, locationKey);
+        // if no track is playing, start the new track with fade-in
+        console.log('starting new track with fade-in...');
+        startNewTrack(trackFile, locationKey, true); // add a fade-in flag for initial play
     }
 }
 
-// helper function to start a new track
-function startNewTrack(trackFile, locationKey) {
+// helper function to start a new track with optional fade-in
+function startNewTrack(trackFile, locationKey, fadeIn = false) {
     currentTrack = new Tone.Player({
         url: trackFile,
         autostart: false,
         onload: () => {
             console.log(`track ${trackFile} loaded successfully.`);
 
-            try {
-                if (currentTrack.buffer && currentTrack.buffer.loaded) {
-                    currentTrack.volume.value = -Infinity; // start from silence for fade-in
-                    currentTrack.start();
-                    currentTrack.volume.rampTo(0, fadeInDuration / 1000); // fade-in to 0 dB using fadeInDuration
-                    console.log('playback started with fade-in.');
-                    currentlyPlayingLocation = locationKey; // update the currently playing location
-                } else {
-                    console.error('buffer not loaded correctly, unable to start playback.');
-                }
-            } catch (err) {
-                console.error('error during playback initiation:', err);
+            if (fadeIn) {
+                currentTrack.volume.value = -Infinity; // start from silence for fade-in
+                currentTrack.start();
+                currentTrack.volume.rampTo(0, fadeInDuration / 1000); // fade-in to 0 dB using fadeInDuration
+                console.log('playback started with fade-in.');
+            } else {
+                currentTrack.start(); // start normally without fade-in
             }
+
+            currentlyPlayingLocation = locationKey; // update the currently playing location
         },
         onerror: (error) => {
             console.error("error loading track:", error);
         }
     }).toDestination();
 }
+
 
 // function to determine which track to play based on GPS coordinates
 function handleLocationChange(latitude, longitude) {
