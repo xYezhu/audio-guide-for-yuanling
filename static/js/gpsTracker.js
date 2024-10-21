@@ -1,5 +1,8 @@
 let audioContextStarted = false; // flag to check if audio context is started
 let latitude, longitude; // define globally for use across functions
+let prevLatitude, prevLongitude;
+let changeThreshold = 0.0001; // minimum change to trigger playback adjustment
+
 
 function setup() {
     // create the canvas for displaying GPS data
@@ -46,40 +49,49 @@ function updatePosition(position) {
     latitude = position.coords.latitude;
     longitude = position.coords.longitude;
 
-    // call the handleLocationChange function to play the corresponding track
-    if (typeof handleLocationChange === 'function') {
+    // Trigger handleLocationChange only if significant location change
+    if (typeof handleLocationChange === 'function' && 
+        (Math.abs(latitude - prevLatitude) > changeThreshold || 
+         Math.abs(longitude - prevLongitude) > changeThreshold)) {
+        
         handleLocationChange(latitude, longitude);
-    } else {
-        console.error("handleLocationChange function is not defined.");
+        prevLatitude = latitude;
+        prevLongitude = longitude;
     }
 }
-
 // error handling function
 function showError(error) {
     let errorMessage;
     switch (error.code) {
         case error.PERMISSION_DENIED:
-            errorMessage = 'user denied the request for geolocation.';
+            errorMessage = 'Geolocation permission denied. Enable it in settings.';
             break;
         case error.POSITION_UNAVAILABLE:
-            errorMessage = 'location information is unavailable.';
+            errorMessage = 'Location information unavailable.';
             break;
         case error.TIMEOUT:
-            errorMessage = 'the request to get user location timed out.';
+            errorMessage = 'Request to get location timed out.';
             break;
-        case error.UNKNOWN_ERROR:
-            errorMessage = 'an unknown error occurred.';
-            break;
+        default:
+            errorMessage = 'An unknown error occurred.';
     }
-    console.log(errorMessage);
-    text(errorMessage, 10, height / 2);
+
+    console.error(errorMessage);
+    const canvasContainer = document.getElementById('canvasContainer');
+    if (canvasContainer) {
+        canvasContainer.textContent = errorMessage; // Display error on the page
+    }
 }
 
 // start the audio context on the first user interaction
 async function userInteracted() {
     if (!audioContextStarted) {
-        await Tone.start();
-        audioContextStarted = true;
-        console.log('audio context started');
+        try {
+            await Tone.start();
+            audioContextStarted = true;
+            console.log('Audio context started.');
+        } catch (error) {
+            console.error('Failed to start audio context:', error);
+        }
     }
 }
