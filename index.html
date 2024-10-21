@@ -11,6 +11,49 @@
     </head>
 <body>
 
+    <!-- main script -->
+    <script>
+        // list your array of audio files to be preloaded
+        const audioFiles = ["static/audio/track1.mp3",
+            "static/audio/track2.mp3",
+            "static/audio/track3.mp3",
+            "static/audio/track4.mp3",
+            "static/audio/track5.mp3",
+            "static/audio/track6.mp3",
+            "static/audio/background1.mp3",
+            "static/audio/background2.mp3",
+            "static/audio/background3.mp3",
+            "static/audio/background4.mp3"
+            // add more below...
+            ];
+
+    const preloadedAudio = {}; 
+
+    // function to preload the audio files using Tone.js
+    function preloadAudio() {
+        audioFiles.forEach(file => {
+            const player = new Tone.Player({
+                url: file,
+                autostart: false,
+                onload: () => {
+                    console.log(`${file} preloaded.`);
+                },
+                onerror: (error) => {
+                    console.error(`Error preloading ${file}:`, error);
+                }
+            }).toDestination();
+
+            preloadedAudio[file] = player; // store the player in the object
+        });
+    }
+
+    // call preloadAudio on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        preloadAudio();
+    });
+
+    </script>
+    
     <!-- preload icon -->
     <div id="preloadIconContainer">
         <button id="preloadIcon">
@@ -55,48 +98,5 @@
             &copy; Sound Studies Group, SUSTech, 2024
         </div>
     </footer>    
-
-    <!-- main script -->
-    <script>
-        // list your array of audio files to be preloaded
-        const audioFiles = ["static/audio/track1.mp3",
-            "static/audio/track2.mp3",
-            "static/audio/track3.mp3",
-            "static/audio/track4.mp3",
-            "static/audio/track5.mp3",
-            "static/audio/track6.mp3",
-            "static/audio/background1.mp3",
-            "static/audio/background2.mp3",
-            "static/audio/background3.mp3",
-            "static/audio/background4.mp3"
-            // add more below...
-            ];
-
-    const preloadedAudio = {}; 
-
-    // function to preload the audio files using Tone.js
-    function preloadAudio() {
-        audioFiles.forEach(file => {
-            const player = new Tone.Player({
-                url: file,
-                autostart: false,
-                onload: () => {
-                    console.log(`${file} preloaded.`);
-                },
-                onerror: (error) => {
-                    console.error(`Error preloading ${file}:`, error);
-                }
-            }).toDestination();
-
-            preloadedAudio[file] = player; // store the player in the object
-        });
-    }
-
-    // call preloadAudio on page load
-    document.addEventListener('DOMContentLoaded', function () {
-        preloadAudio();
-    });
-
-    </script>
 </body>
 </html>
