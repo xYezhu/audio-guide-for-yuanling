@@ -167,10 +167,6 @@ function handleLocationChange(latitude, longitude) {
         return;
     }
 
-    if (currentlyPlayingLocation) {
-        stopAllPlayback(); // defaults to 'false' for userStopped
-    }
-
     // define your location ranges and match with tracks here
     // explanation: &&: true if and only if all the operands are true
     // resources: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_AND
