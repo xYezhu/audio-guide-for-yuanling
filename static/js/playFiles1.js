@@ -102,7 +102,9 @@ async function togglePlayback() {
                 console.error('error getting GPS location:', error);
             },
             {
-                enableHighAccuracy: true
+                enableHighAccuracy: true,
+                maximumAge: 10000,
+                timeout: 5000
             }
         );
     }
