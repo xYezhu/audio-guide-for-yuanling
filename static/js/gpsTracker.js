@@ -49,16 +49,18 @@ function updatePosition(position) {
     latitude = position.coords.latitude;
     longitude = position.coords.longitude;
 
-    // Trigger handleLocationChange only if significant location change
-    if (typeof handleLocationChange === 'function' && 
-        (Math.abs(latitude - prevLatitude) > changeThreshold || 
-         Math.abs(longitude - prevLongitude) > changeThreshold)) {
-        
+    // trigger handleLocationChange only if significant location change
+    if (typeof prevLatitude === 'undefined' || typeof prevLongitude === 'undefined' ||
+        Math.abs(latitude - prevLatitude) > changeThreshold || 
+        Math.abs(longitude - prevLongitude) > changeThreshold) {
+            
         handleLocationChange(latitude, longitude);
         prevLatitude = latitude;
         prevLongitude = longitude;
     }
+    
 }
+
 // error handling function
 function showError(error) {
     let errorMessage;

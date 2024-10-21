@@ -5,12 +5,11 @@
     <title>group 1</title>
     <link rel="stylesheet" href="static/style/group1.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
-    </head>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tone@14.7.39/build/Tone.js"></script>
-    <script src="static/js/playFiles1.js"></script> <!-- playFiles1.js -->
-    <script src="static/js/gpsTracker.js"></script> <!-- gpsTracker.js -->
     <script src="static/js/preLoad.js"></script> <!-- preLoad.js -->
+    <script src="static/js/gpsTracker.js"></script> <!-- gpsTracker.js -->
+    <script src="static/js/playFiles1.js"></script> <!-- playFiles1.js -->
 </head>
 <body>
 
@@ -22,7 +21,7 @@
         <!-- play and stop buttons -->
         <div class="control-buttons">
             <img src="static/images/image1.png" alt="group 1 play" class="play-image">
-            <img id="playButton" src="static/images/playButton.png" alt="play" class="play-button" onclick="togglePlayPause()">
+            <img id="playButton" src="static/images/playButton.png" alt="play" class="play-button">
         </div>
         <!-- canvas for displaying GPS data -->
         <div id="canvasContainer"></div>
@@ -35,9 +34,6 @@
         </div>
     </footer>   
 
-    <!-- references -->
-    <script src="static/js/playFiles1.js"></script> 
-    <script src="static/js/gpsTracker.js"></script> 
     <script>
         // add event listener to enable location button
         document.addEventListener('DOMContentLoaded', function () {

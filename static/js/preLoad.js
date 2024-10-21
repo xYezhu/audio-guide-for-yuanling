@@ -14,26 +14,39 @@ if (!window.preloadingComplete) {
     ];
 
     let loadedCount = 0;
+
     audioFiles.forEach(file => {
         if (!window.preloadedAudio[file]) {
-            // Preload using Tone.Player
+            // preload using Tone.Player
             const player = new Tone.Player({
                 url: file,
                 autostart: false,
                 loop: file.includes('background'),
                 onload: () => {
                     loadedCount++;
-                    if (loadedCount === audioFiles.length) {
-                        window.preloadingComplete = true; // Mark as complete
-                        console.log("All files preloaded.");
-                    }
+                    console.log(`Loaded ${file}`);
+                    window.preloadedAudio[file] = player;
+                    checkIfAllFilesLoaded();
                 },
                 onerror: (error) => {
+                    loadedCount++;
                     console.error(`Error loading ${file}:`, error);
+                    // Mark the file as failed to load
+                    window.preloadedAudio[file] = null;
+                    checkIfAllFilesLoaded();
                 }
             }).toDestination();
-
-            window.preloadedAudio[file] = player;
+        } else {
+            // If already preloaded, increment loadedCount
+            loadedCount++;
+            checkIfAllFilesLoaded();
         }
     });
+
+    function checkIfAllFilesLoaded() {
+        if (loadedCount === audioFiles.length) {
+            window.preloadingComplete = true; // mark as complete
+            console.log("all files have been attempted to preload.");
+        }
+    }
 }

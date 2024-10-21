@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } 
 });
 
+let audioContextStarted = false;
 let currentTrack = null;
 let fadeInDuration = 2000; // set fade-in time to 2000 ms (2 seconds), or any value you prefer
 let fadeOutDuration = 2000; // set fade-out time to 2000 ms (2 seconds),  or any value you prefer
@@ -23,6 +24,7 @@ let userInitiatedPlayback = false; // flag to determine if playback has been sta
 let isPlaying = false; // only declare once to avoid conflicts
 let backgroundTrack = null;
 
+// background track
 function startBackgroundTrack() {
     const backgroundFile = "static/audio/background1.mp3"; 
     if (window.preloadedAudio[backgroundFile]) {
@@ -30,31 +32,30 @@ function startBackgroundTrack() {
         if (backgroundTrack.state === 'stopped') {
             backgroundTrack.loop = true;
             backgroundTrack.start();
-            console.log("Background track started.");
+            console.log("background track started.");
         }
     } else {
-        console.error("Background track not preloaded correctly.");
+        console.error("background track not preloaded correctly.");
     }
 }
-
 
 async function togglePlayback() {
     let playButton = document.getElementById('playButton');
 
     if (isPlaying) {
-        stopAllPlayback();
-        playButton.textContent = "play";
+        stopAllPlayback(true);
+        playButton.src = 'static/images/playButton.png';
         isPlaying = false;
     } else {
         // wait until preloading is complete before proceeding
         if (!window.preloadingComplete) {
-            console.error("Cannot start playback. Audio preloading not complete.");
+            console.error("cannot start playback. Audio preloading not complete.");
             return;
         }
 
         userInitiatedPlayback = true;
         isPlaying = true;
-        playButton.textContent = "stop";
+        playButton.src = 'static/images/pauseButton.png';
         console.log("user initiated playback. GPS-based playback now enabled.");
 
         // ensure the Tone.js audio context is started
@@ -81,9 +82,8 @@ async function togglePlayback() {
     }
 }
 
-
 // function to stop all playback including background
-function stopAllPlayback() {
+function stopAllPlayback(userStopped = false) {
     if (currentTrack) {
         currentTrack.volume.rampTo(-Infinity, fadeOutDuration / 1000);
         setTimeout(() => {
@@ -95,12 +95,16 @@ function stopAllPlayback() {
 
     if (backgroundTrack) {
         backgroundTrack.stop(); 
-        console.log("Background track stopped.");
+        console.log("background track stopped.");
     }
 
-    userInitiatedPlayback = false;
-    isPlaying = false;
-    console.log("All playback stopped.");
+    if (userStopped) {
+        userInitiatedPlayback = false;
+        isPlaying = false;
+        console.log("user stopped playback.");
+    } else {
+        console.log("playback stopped due to location change.");
+    }
 }
 
 
@@ -109,7 +113,7 @@ async function playTrack(trackFile, locationKey) {
     if (currentTrack && currentlyPlayingLocation === locationKey) return;
 
     if (currentTrack && currentlyPlayingLocation !== locationKey) {
-        console.log('Crossfading to new track...');
+        console.log('crossfading to new track...');
         currentTrack.volume.rampTo(-Infinity, fadeOutDuration / 1000); 
         setTimeout(() => {
             currentTrack.stop();
@@ -128,7 +132,7 @@ function startNewTrack(trackFile, locationKey, fadeIn = false) {
         currentTrack.loop = false;
 
         if (fadeIn) {
-            currentTrack.volume.value = -Infinity; 
+            currentTrack.volume.setValueAtTime(-Infinity, Tone.now());
             currentTrack.start();
             currentTrack.volume.rampTo(0, fadeInDuration / 1000); 
             console.log('New track started with fade-in.');
@@ -149,6 +153,10 @@ function handleLocationChange(latitude, longitude) {
         // if playback has not been initiated by user, do nothing
         console.log("playback not initiated by user. Ignoring GPS location change.");
         return;
+    }
+
+    if (currentlyPlayingLocation) {
+        stopAllPlayback(); // defaults to 'false' for userStopped
     }
 
     // define your location ranges and match with tracks here
