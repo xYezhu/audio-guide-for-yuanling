@@ -1,3 +1,5 @@
+// gpsTracker.js
+
 document.addEventListener('DOMContentLoaded', function() {
     // Check if 'canvasContainer' element exists
     if (document.getElementById('canvasContainer')) {
@@ -17,13 +19,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Check if geolocation is available in the browser
                 if (navigator.geolocation) {
+                    // Request current position to prompt for permissions
+                    navigator.geolocation.getCurrentPosition(
+                        position => {
+                            updatePosition(position);
+                        },
+                        error => {
+                            showError(error);
+                        },
+                        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+                    );
+
+                    // Watch position for changes
                     navigator.geolocation.watchPosition(
                         updatePosition,
                         showError,
-                        { enableHighAccuracy: true } // Enable high accuracy for GPS location
+                        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
                     );
                 } else {
                     p.text('Geolocation is not supported by your browser.', 10, 20);
+                    console.error('Geolocation is not supported by your browser.');
                 }
             };
 
@@ -40,10 +55,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (latitude !== undefined && longitude !== undefined) {
                     p.textSize(45);
                     p.fill('#34495e');
-                    p.text(`latitude: ${latitude.toFixed(4)}`, 10, p.height * 0.25);
-                    p.text(`longitude: ${longitude.toFixed(4)}`, 10, p.height * 0.4);
+                    p.text(`Latitude: ${latitude.toFixed(4)}`, 10, p.height * 0.25);
+                    p.text(`Longitude: ${longitude.toFixed(4)}`, 10, p.height * 0.4);
                 } else {
-                    p.text('Waiting for GPS data...', 10, p.height * 0.1);
+                    p.text('Waiting for GPS data...', 10, p.height * 0.5);
                 }
             };
 
@@ -76,16 +91,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 let errorMessage;
                 switch (error.code) {
                     case error.PERMISSION_DENIED:
-                        errorMessage = 'Geolocation permission denied. Enable it in settings.';
+                        errorMessage = 'Geolocation permission denied. Please allow location access.';
                         break;
                     case error.POSITION_UNAVAILABLE:
-                        errorMessage = 'Location information unavailable.';
+                        errorMessage = 'Location information is unavailable.';
                         break;
                     case error.TIMEOUT:
-                        errorMessage = 'Request to get location timed out.';
+                        errorMessage = 'The request to get user location timed out.';
                         break;
                     default:
                         errorMessage = 'An unknown error occurred.';
+                        break;
                 }
 
                 console.error(errorMessage);
@@ -103,3 +119,4 @@ document.addEventListener('DOMContentLoaded', function() {
         console.warn("canvasContainer not found. Skipping p5.js initialization.");
     }
 });
+ 
