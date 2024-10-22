@@ -77,6 +77,13 @@ async function togglePlayback() {
 
         // Start the background track
         startBackgroundTrack();
+
+        // If current location is available, call handleLocationChange()
+        if (typeof window.latitude !== 'undefined' && typeof window.longitude !== 'undefined') {
+            handleLocationChange(window.latitude, window.longitude);
+        } else {
+            console.log("Current location not available.");
+        }
     }
 }
 
@@ -158,7 +165,7 @@ function handleLocationChange(latitude, longitude) {
 
     if (!userInitiatedPlayback) {
         // If playback has not been initiated by user, do nothing
-        console.log("Playback not initiated by user. Ignoring GPS location change.");
+        console.log("Playback not initiated by user. Ignoring GPS location check.");
         return;
     }
 
@@ -182,7 +189,8 @@ function handleLocationChange(latitude, longitude) {
         playTrack(tracks["location6"], "location6");
     } else {
         console.log("No track assigned for this location.");
-        // Stop playback when leaving all defined zones
+        // Optionally, you can stop the current track if the user is not in any zone
+        // If you want the track to continue playing even if the user leaves the zone, comment out the following lines
         if (currentTrack) {
             currentTrack.fadeOut = fadeOutDuration / 1000; // in seconds
             currentTrack.stop("+0"); // Stops with fade out applied

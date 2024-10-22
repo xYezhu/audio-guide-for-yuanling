@@ -1,13 +1,9 @@
-// gpsTracker.js
-
 document.addEventListener('DOMContentLoaded', function() {
     // Check if 'canvasContainer' element exists
     if (document.getElementById('canvasContainer')) {
         // p5.js instance mode
         let s = function(p) {
             let latitude, longitude; // Define globally for use across functions
-            let prevLatitude, prevLongitude;
-            let changeThreshold = 0.0001; // Minimum change to trigger playback adjustment
 
             p.setup = function() {
                 // Create the canvas for displaying GPS data
@@ -67,23 +63,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 latitude = position.coords.latitude;
                 longitude = position.coords.longitude;
 
+                // Store current position in the global window object
+                window.latitude = latitude;
+                window.longitude = longitude;
+
                 console.log(`updatePosition called with latitude: ${latitude}, longitude: ${longitude}`);
 
-                // Trigger handleLocationChange only if significant location change
-                if (typeof prevLatitude === 'undefined' || typeof prevLongitude === 'undefined' ||
-                    Math.abs(latitude - prevLatitude) > changeThreshold || 
-                    Math.abs(longitude - prevLongitude) > changeThreshold) {
-
-                    // Directly call handleLocationChange after ensuring it is defined
-                    if (typeof window.handleLocationChange === 'function') {
-                        window.handleLocationChange(latitude, longitude);
-                    } else {
-                        console.error('handleLocationChange is not defined.');
-                    }
-
-                    prevLatitude = latitude;
-                    prevLongitude = longitude;
-                }
+                // No need to call handleLocationChange here
+                // This ensures tracks don't change when the location updates
             }
 
             // Error handling function
@@ -119,4 +106,3 @@ document.addEventListener('DOMContentLoaded', function() {
         console.warn("canvasContainer not found. Skipping p5.js initialization.");
     }
 });
- 
