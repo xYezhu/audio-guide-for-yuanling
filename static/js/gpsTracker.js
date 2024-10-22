@@ -33,8 +33,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
                     );
                 } else {
-                    p.text('Geolocation is not supported by your browser.', 10, 20);
-                    console.error('Geolocation is not supported by your browser.');
+                    p.text('geolocation is not supported by your browser.', 10, 20);
+                    console.error('geolocation is not supported by your browser.');
                 }
             };
 
@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.latitude = latitude;
                 window.longitude = longitude;
 
-                console.log(`updatePosition called with latitude: ${latitude}, longitude: ${longitude}`);
+                // console.log(`updatePosition called with latitude: ${latitude}, longitude: ${longitude}`);
             }
 
             //eError handling function
