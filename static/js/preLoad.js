@@ -55,7 +55,7 @@ function startPreloading() {
         function checkIfAllFilesLoaded() {
             // update user feedback with progress
             if (preloadButton) {
-                preloadButton.innerText = `Preloading... (${loadedCount}/${totalFiles})`;
+                preloadButton.innerText = `preloading... (${loadedCount}/${totalFiles})`;
             }
 
             if (loadedCount === totalFiles) {
@@ -78,6 +78,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (preloadButton) {
         preloadButton.addEventListener('click', startPreloading);
     } else {
-        console.error("Preload button not found.");
+        console.error("preload button not found.");
     }
 });
