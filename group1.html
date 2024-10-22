@@ -48,24 +48,24 @@
             }
         });
 
-        // Success callback for geolocation
+        // success callback for geolocation
         function showPosition(position) {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
             locationStatus.textContent = `latitude: ${latitude.toFixed(4)}, longitude: ${longitude.toFixed(4)}`;
             console.log("location obtained successfully.");
             
-            // Now that we have the coordinates, you can update them globally for other functions
+            // now that we have the coordinates, you can update them globally for other functions
             window.latitude = latitude;
             window.longitude = longitude;
 
-            // Optionally trigger handleLocationChange if you need to start audio based on location
+            // optionally trigger handleLocationChange if you need to start audio based on location
             if (typeof handleLocationChange === 'function') {
                 handleLocationChange(latitude, longitude);
             }
         }
 
-        // Error callback for geolocation
+        // error callback for geolocation
         function showError(error) {
             let errorMessage;
             switch (error.code) {
@@ -86,7 +86,7 @@
             locationStatus.textContent = errorMessage;
         }
 
-        // Modified togglePlayPause to reflect changes for location access
+        // modified togglePlayPause to reflect changes for location access
         function togglePlayPause() {
             const playButton = document.getElementById('playButton');
             if (playButton.src.includes('playButton.png')) {
