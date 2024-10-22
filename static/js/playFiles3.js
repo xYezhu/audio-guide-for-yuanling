@@ -29,21 +29,21 @@ async function userInteracted() {
         try {
             await Tone.start();
             window.audioContextStarted = true;
-            console.log('Audio context started.');
+            console.log('audio context started.');
         } catch (error) {
-            console.error('Failed to start audio context:', error);
+            console.error('failed to start audio context:', error);
         }
     } else {
-        console.log('Audio context already started.');
+        console.log('audio context already started.');
     }
 }
 
 // background track
 function startBackgroundTrack() {
-    const backgroundFile = "static/audio/background3.mp3";
+    const backgroundFile = "static/audio/background2.mp3";
     loadAndPlayAudio(backgroundFile, true, true, function(player) {
         backgroundTrack = player;
-        console.log("Background track started.");
+        console.log("background track started.");
     });
 }
 
@@ -58,7 +58,7 @@ async function togglePlayback() {
         userInitiatedPlayback = true;
         isPlaying = true;
         playButton.src = 'static/images/pauseButton.png';
-        console.log("User initiated playback. GPS-based playback now enabled.");
+        console.log("user initiated playback. GPS-based playback now enabled.");
 
         // ensure the Tone.js audio context is started
         await userInteracted();
@@ -70,7 +70,7 @@ async function togglePlayback() {
         if (typeof window.latitude !== 'undefined' && typeof window.longitude !== 'undefined') {
             handleLocationChange(window.latitude, window.longitude);
         } else {
-            console.log("Current location not available.");
+            console.log("current location not available.");
         }
     }
 }
@@ -90,15 +90,15 @@ function stopAllPlayback(userStopped = false) {
         backgroundTrack.fadeOut = fadeOutDuration / 1000; // in seconds
         backgroundTrack.stop("+0");
         backgroundTrack = null;
-        console.log("Background track stopped.");
+        console.log("background track stopped.");
     }
 
     if (userStopped) {
         userInitiatedPlayback = false;
         isPlaying = false;
-        console.log("User stopped playback.");
+        console.log("user stopped playback.");
     } else {
-        console.log("Playback stopped due to location change.");
+        console.log("playback stopped due to location change.");
     }
 }
 
@@ -107,7 +107,7 @@ function playTrack(trackFile, locationKey) {
     if (currentTrack && currentlyPlayingLocation === locationKey) return;
 
     if (currentTrack && currentlyPlayingLocation !== locationKey) {
-        console.log('Crossfading to new track...');
+        console.log('crossfading to new track...');
 
         let oldTrack = currentTrack;
 
@@ -124,12 +124,12 @@ function playTrack(trackFile, locationKey) {
 
 // function to start a new track with optional fade-in
 function startNewTrack(trackFile, locationKey, fadeIn = false) {
-    console.log(`Attempting to start new track: ${trackFile}`);
+    console.log(`attempting to start new track: ${trackFile}`);
 
     loadAndPlayAudio(trackFile, false, fadeIn, function(player) {
         currentTrack = player;
         currentlyPlayingLocation = locationKey;
-        console.log(`Playing track: ${trackFile}`);
+        console.log(`playing track: ${trackFile}`);
     });
 }
 
@@ -146,7 +146,7 @@ function loadAndPlayAudio(file, loop = false, fadeIn = false, callback) {
             if (callback) callback(player);
         },
         onerror: (error) => {
-            console.error(`Error loading ${file}:`, error);
+            console.error(`error loading ${file}:`, error);
         }
     });
 }
@@ -157,7 +157,7 @@ function handleLocationChange(latitude, longitude) {
 
     if (!userInitiatedPlayback) {
         // if playback has not been initiated by user, do nothing
-        console.log("Playback not initiated by user. Ignoring GPS location check.");
+        console.log("playback not initiated by user. Ignoring GPS location check.");
         return;
     }
 
@@ -175,7 +175,7 @@ function handleLocationChange(latitude, longitude) {
     } else if (latitude > 22.5920 && latitude < 22.5930 && longitude > 113.9920 && longitude < 113.9940) {
         playTrack(tracks["location6"], "location6");
     } else {
-        console.log("No track assigned for this location.");
+        console.log("no track assigned for this location.");
         // optionally, stop the current track if not in any location
         if (currentTrack) {
             currentTrack.fadeOut = fadeOutDuration / 1000; // in seconds
