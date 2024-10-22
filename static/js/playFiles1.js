@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 window.audioContextStarted = window.audioContextStarted || false;
 let currentTrack = null;
-let fadeInDuration = 2000; // Adjust as needed
-let fadeOutDuration = 2000; // Adjust as needed
-let currentlyPlayingLocation = null; // Track which location's track is currently playing
+let fadeInDuration = 2000; // adjust as needed
+let fadeOutDuration = 2000; // ajust as needed
+let currentlyPlayingLocation = null; // track which location's track is currently playing
 let tracks = {
     "location1": "static/audio/track1.mp3",
     "location2": "static/audio/track2.mp3",
@@ -17,10 +17,10 @@ let tracks = {
     "location4": "static/audio/track4.mp3",
     "location5": "static/audio/track5.mp3",
     "location6": "static/audio/track6.mp3"
-    // Add more tracks as needed...
+    // add more below...
 };
 
-let userInitiatedPlayback = false; // Flag to determine if playback has been started by user
+let userInitiatedPlayback = false; // flag to determine if playback has been started by user
 let isPlaying = false;
 let backgroundTrack = null;
 
@@ -38,13 +38,13 @@ async function userInteracted() {
     }
 }
 
-// Background track
+// background track
 function startBackgroundTrack() {
     const backgroundFile = "static/audio/background1.mp3";
     if (window.preloadedAudio && window.preloadedAudio[backgroundFile]) {
         backgroundTrack = window.preloadedAudio[backgroundFile];
         backgroundTrack.loop = true;
-        backgroundTrack.fadeIn = fadeInDuration / 1000; // Convert milliseconds to seconds
+        backgroundTrack.fadeIn = fadeInDuration / 1000; // convert milliseconds to seconds
         backgroundTrack.toDestination();
         backgroundTrack.start();
         console.log("Background track started.");
@@ -61,39 +61,39 @@ async function togglePlayback() {
         playButton.src = 'static/images/playButton.png';
         isPlaying = false;
     } else {
-        // Ensure preloading is complete before proceeding
+        // ensure preloading is complete before proceeding
         if (!window.preloadingComplete) {
-            console.error("Cannot start playback. Audio preloading not complete.");
+            console.error("cannot start playback. audio preloading not complete.");
             return;
         }
 
         userInitiatedPlayback = true;
         isPlaying = true;
         playButton.src = 'static/images/pauseButton.png';
-        console.log("User initiated playback. GPS-based playback now enabled.");
+        console.log("user initiated playback. GPS-based playback now enabled.");
 
-        // Ensure the Tone.js audio context is started
+        // ensure the Tone.js audio context is started
         await userInteracted();
 
-        // Start the background track
+        // start the background track
         startBackgroundTrack();
 
-        // If current location is available, call handleLocationChange()
+        // if current location is available, call handleLocationChange()
         if (typeof window.latitude !== 'undefined' && typeof window.longitude !== 'undefined') {
             handleLocationChange(window.latitude, window.longitude);
         } else {
-            console.log("Current location not available.");
+            console.log("current location not available.");
         }
     }
 }
 
-// Function to stop all playback including background
+// function to stop all playback including background
 function stopAllPlayback(userStopped = false) {
     if (currentTrack) {
-        // Set fadeOut duration
+        // set fadeOut duration
         currentTrack.fadeOut = fadeOutDuration / 1000; // in seconds
-        // Stop playback with fade out
-        currentTrack.stop("+0"); // Stops immediately with fade out applied
+        // stop playback with fade out
+        currentTrack.stop("+0"); // stops immediately with fade out applied
         currentTrack = null;
         currentlyPlayingLocation = null;
     }
@@ -114,7 +114,7 @@ function stopAllPlayback(userStopped = false) {
     }
 }
 
-// Function to play a track with fade-in and fade-out
+// function to play a track with fade-in and fade-out
 function playTrack(trackFile, locationKey) {
     if (currentTrack && currentlyPlayingLocation === locationKey) return;
 
@@ -123,18 +123,18 @@ function playTrack(trackFile, locationKey) {
 
         let oldTrack = currentTrack;
 
-        // Start the new track
+        // start the new track
         startNewTrack(trackFile, locationKey, true);
 
-        // Fade out the old track
+        // fade out the old track
         oldTrack.fadeOut = fadeOutDuration / 1000; // in seconds
-        oldTrack.stop("+0"); // Stops with fade out applied
+        oldTrack.stop("+0"); // stops with fade out applied
     } else if (!currentTrack) {
         startNewTrack(trackFile, locationKey, true);
     }
 }
 
-// Function to start a new track with optional fade-in
+// function to start a new track with optional fade-in
 function startNewTrack(trackFile, locationKey, fadeIn = false) {
     console.log(`Attempting to start new track: ${trackFile}`);
 
@@ -142,29 +142,29 @@ function startNewTrack(trackFile, locationKey, fadeIn = false) {
         currentTrack = window.preloadedAudio[trackFile];
         currentTrack.loop = false;
 
-        // Ensure the track is connected to the audio destination
+        // ensure the track is connected to the audio destination
         currentTrack.toDestination();
 
-        // Set the fadeIn property
+        // set the fadeIn property
         currentTrack.fadeIn = fadeIn ? fadeInDuration / 1000 : 0;
 
-        // Start playback
+        // start playback
         currentTrack.start();
-        console.log('New track started with fade-in.');
+        console.log('new track started with fade-in.');
 
         currentlyPlayingLocation = locationKey;
-        console.log(`Playing track: ${trackFile}`);
+        console.log(`playing track: ${trackFile}`);
     } else {
-        console.error(`Track ${trackFile} not preloaded correctly.`);
+        console.error(`track ${trackFile} not preloaded correctly.`);
     }
 }
 
-// Function to determine which track to play based on GPS coordinates
+// function to determine which track to play based on GPS coordinates
 function handleLocationChange(latitude, longitude) {
     console.log(`handleLocationChange called with latitude: ${latitude}, longitude: ${longitude}`);
 
     if (!userInitiatedPlayback) {
-        // If playback has not been initiated by user, do nothing
+        // if playback has not been initiated by user, do nothing
         console.log("Playback not initiated by user. Ignoring GPS location check.");
         return;
     }
@@ -174,7 +174,9 @@ function handleLocationChange(latitude, longitude) {
         return;
     }
 
-    // Adjust the following conditions for actual location-based playback
+    // define your location ranges and match with tracks here
+    // explanation: &&: true if and only if all the operands are true
+    // resources: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_AND
     if (latitude > 1.20 && latitude < 1.40 && longitude > 103.8100 && longitude < 103.8220) {
         playTrack(tracks["location1"], "location1");
     } else if (latitude > 22.5955 && latitude < 22.5960 && longitude > 113.9980 && longitude < 113.9990) {
@@ -189,16 +191,15 @@ function handleLocationChange(latitude, longitude) {
         playTrack(tracks["location6"], "location6");
     } else {
         console.log("No track assigned for this location.");
-        // Optionally, you can stop the current track if the user is not in any zone
-        // If you want the track to continue playing even if the user leaves the zone, comment out the following lines
+        // if you want the track to continue playing even if the user leaves the zone, comment out the following lines
         if (currentTrack) {
             currentTrack.fadeOut = fadeOutDuration / 1000; // in seconds
-            currentTrack.stop("+0"); // Stops with fade out applied
+            currentTrack.stop("+0"); // stops with fade out applied
             currentTrack = null;
             currentlyPlayingLocation = null;
         }
     }
 }
 
-// Attach handleLocationChange to the window object so it can be accessed globally
+// attach handleLocationChange to the window object so it can be accessed globally
 window.handleLocationChange = handleLocationChange;
