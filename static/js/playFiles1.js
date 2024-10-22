@@ -35,6 +35,8 @@ async function userInteracted() {
         } catch (error) {
             console.error('Failed to start audio context:', error);
         }
+    } else {
+        console.log('Audio context already started.');
     }
 }
 
@@ -129,14 +131,18 @@ function startNewTrack(trackFile, locationKey, fadeIn = false) {
         currentTrack = window.preloadedAudio[trackFile];
         currentTrack.loop = false;
 
+        // Ensure the track is connected to the audio destination
+        currentTrack.toDestination();
+
+        // Set the fadeIn property
         if (fadeIn) {
-            currentTrack.volume.setValueAtTime(-Infinity, Tone.now());
-            currentTrack.start();
-            currentTrack.volume.rampTo(0, fadeInDuration / 1000); 
-            console.log('New track started with fade-in.');
+            currentTrack.fadeIn = fadeInDuration / 1000; // Convert milliseconds to seconds
         } else {
-            currentTrack.start(); 
+            currentTrack.fadeIn = 0;
         }
+
+        currentTrack.start();
+        console.log('New track started with fade-in.');
 
         currentlyPlayingLocation = locationKey;
         console.log(`Playing track: ${trackFile}`);
@@ -144,6 +150,7 @@ function startNewTrack(trackFile, locationKey, fadeIn = false) {
         console.error(`Track ${trackFile} not preloaded correctly.`);
     }
 }
+
 
 // Function to determine which track to play based on GPS coordinates
 function handleLocationChange(latitude, longitude) {
