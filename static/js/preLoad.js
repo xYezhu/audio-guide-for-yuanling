@@ -11,7 +11,12 @@ function startPreloading() {
             "static/audio/track4.mp3",
             "static/audio/track5.mp3",
             "static/audio/track6.mp3",
-            "static/audio/background1.mp3"
+            "static/audio/background1.mp3",
+            "static/audio/background2.mp3",
+            "static/audio/background3.mp3",
+            "static/audio/background4.mp3"
+            // add more below...
+
         ];
 
         let loadedCount = 0;
