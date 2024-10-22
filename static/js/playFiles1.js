@@ -161,7 +161,7 @@ function handleLocationChange(latitude, longitude) {
     // define your location ranges and match with tracks here
     // explanation: &&: true if and only if all the operands are true
     // resources: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Logical_AND
-    if (latitude > 22.5800 && latitude < 22.5830 && longitude > 113.9200 && longitude < 113.9220) {
+    if (latitude > 1.20 && latitude < 1.40 && longitude > 102.9200 && longitude < 103.9220) {
         playTrack(tracks["location1"], "location1"); // in building, 3rd floor
     } else if (latitude > 22.5955 && latitude < 22.5960 && longitude > 113.9980 && longitude < 113.9990) {
         playTrack(tracks["location2"], "location2"); // outside the building, near the bin
