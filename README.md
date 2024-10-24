@@ -1,15 +1,15 @@
-This audio guide prototype for YuanLing Street includes a step-by-step tutorial on uploading your work to the application.
+This audio guide prototype for YuanLing Street includes a step-by-step tutorial on uploading your work to the application. To start using this project, you need to create your own copy by forking the repository. To do this, click the “Fork” button at the top right corner of this page. This will create a personal copy of the repository under your own GitHub account. You can then clone your fork to your local machine to begin working on it. Remember, any changes you push to your forked repository won’t affect the original project, so feel free to experiment!
 
 **1. Upload your audio files**
 
-Inside 'static', you could upload your sound design files to 'audio'. As an example, when you upload 'track1.mp3', it needs to be preloaded in the home page. To acheive that, add the files inside index.html as follows:
+Inside 'static', you could upload your sound design files to 'audio'. As an example, when you upload 'track1.mp3', it needs to be preloaded in the home page. To acheive that, add the files inside preLoad.js as follows:
 
     const audioFiles = [
         "static/audio/track1.mp3",
          // add more below...   
     ];
 
-After that, the audio files needs to be assigned to the related location inside playFile.js:
+After that, the audio files needs to be assigned to the related location inside playFile.js, if you are group1, update playFiles1.js, if you are group2, update playFiles2.js. and so on:
 
     let tracks = {
         "location1": "static/audio/track1.mp3",
