@@ -67,10 +67,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.latitude = latitude;
                 window.longitude = longitude;
 
-                // call handleLocationChange
-                if (typeof window.handleLocationChange === 'function') {
-                    window.handleLocationChange(latitude, longitude);
-                }
+                // call handleLocationChange if it's defined
+                // if (typeof window.handleLocationChange === 'function') {
+                //     window.handleLocationChange(latitude, longitude);
+                // }
 
                 // console.log(`updatePosition called with latitude: ${latitude}, longitude: ${longitude}`);
             }

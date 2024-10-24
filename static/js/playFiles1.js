@@ -6,6 +6,46 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 window.audioContextStarted = window.audioContextStarted || false;
+if (navigator.geolocation) {
+    navigator.geolocation.watchPosition(
+        function(position) {
+            let latitude = position.coords.latitude;
+            let longitude = position.coords.longitude;
+
+            window.latitude = latitude;
+            window.longitude = longitude;
+
+            if (userInitiatedPlayback) {
+                handleLocationChange(latitude, longitude);
+            } else {
+                console.log("Playback not initiated by user. Ignoring GPS location check.");
+            }
+        },
+        function(error) {
+            // Handle geolocation errors here
+            let errorMessage;
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMessage = 'Geolocation permission denied. Please allow location access.';
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMessage = 'Location information is unavailable.';
+                    break;
+                case error.TIMEOUT:
+                    errorMessage = 'The request to get user location timed out.';
+                    break;
+                default:
+                    errorMessage = 'An unknown error occurred.';
+                    break;
+            }
+            console.error(errorMessage);
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+    );
+} else {
+    console.error('Geolocation is not supported by your browser.');
+}
+
 let currentTrack = null;
 let fadeInDuration = 2000; // adjust as needed
 let fadeOutDuration = 2000; // adjust as needed
