@@ -6,45 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 window.audioContextStarted = window.audioContextStarted || false;
-if (navigator.geolocation) {
-    navigator.geolocation.watchPosition(
-        function(position) {
-            let latitude = position.coords.latitude;
-            let longitude = position.coords.longitude;
 
-            window.latitude = latitude;
-            window.longitude = longitude;
-
-            if (userInitiatedPlayback) {
-                handleLocationChange(latitude, longitude);
-            } else {
-                console.log("Playback not initiated by user. Ignoring GPS location check.");
-            }
-        },
-        function(error) {
-            // Handle geolocation errors here
-            let errorMessage;
-            switch (error.code) {
-                case error.PERMISSION_DENIED:
-                    errorMessage = 'Geolocation permission denied. Please allow location access.';
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    errorMessage = 'Location information is unavailable.';
-                    break;
-                case error.TIMEOUT:
-                    errorMessage = 'The request to get user location timed out.';
-                    break;
-                default:
-                    errorMessage = 'An unknown error occurred.';
-                    break;
-            }
-            console.error(errorMessage);
-        },
-        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
-    );
-} else {
-    console.error('Geolocation is not supported by your browser.');
-}
 
 let currentTrack = null;
 let fadeInDuration = 2000; // adjust as needed
@@ -110,10 +72,29 @@ async function togglePlayback() {
         if (typeof window.latitude !== 'undefined' && typeof window.longitude !== 'undefined') {
             handleLocationChange(window.latitude, window.longitude);
         } else {
-            console.log("current location not available.");
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        let latitude = position.coords.latitude;
+                        let longitude = position.coords.longitude;
+
+                        window.latitude = latitude;
+                        window.longitude = longitude;
+
+                        handleLocationChange(latitude, longitude);
+                    },
+                    function(error) {
+                        console.error("error getting current position: ", error);
+                    },
+                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+                );
+            } else {
+                console.error('geolocation is not supported by your browser.');
+            }
         }
     }
 }
+
 
 // function to stop all playback including background
 function stopAllPlayback(userStopped = false) {
@@ -192,15 +173,13 @@ function loadAndPlayAudio(file, loop = false, fadeIn = false, callback) {
 }
 
 // function to determine which track to play based on GPS coordinates
-function handleLocationChange(latitude, longitude) {
+async function handleLocationChange(latitude, longitude) {
     console.log(`handleLocationChange called with latitude: ${latitude}, longitude: ${longitude}`);
 
-    if (!userInitiatedPlayback) {
-        // if playback has not been initiated by user, do nothing
-        console.log("playback not initiated by user. Ignoring GPS location check.");
-        return;
+    if (!window.audioContextStarted) {
+        await userInteracted();
     }
-
+    
     // adjust the following conditions for actual location-based playback
     if (latitude > 22.5525 && latitude < 22.5540 && longitude > 114.0940 && longitude < 114.0955) {
         playTrack(tracks["location1"], "location1");
