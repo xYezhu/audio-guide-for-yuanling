@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 window.audioContextStarted = window.audioContextStarted || false;
+
+
 let currentTrack = null;
 let fadeInDuration = 2000; // adjust as needed
 let fadeOutDuration = 2000; // adjust as needed
@@ -70,10 +72,29 @@ async function togglePlayback() {
         if (typeof window.latitude !== 'undefined' && typeof window.longitude !== 'undefined') {
             handleLocationChange(window.latitude, window.longitude);
         } else {
-            console.log("current location not available.");
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        let latitude = position.coords.latitude;
+                        let longitude = position.coords.longitude;
+
+                        window.latitude = latitude;
+                        window.longitude = longitude;
+
+                        handleLocationChange(latitude, longitude);
+                    },
+                    function(error) {
+                        console.error("error getting current position: ", error);
+                    },
+                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+                );
+            } else {
+                console.error('geolocation is not supported by your browser.');
+            }
         }
     }
 }
+
 
 // function to stop all playback including background
 function stopAllPlayback(userStopped = false) {
@@ -152,27 +173,25 @@ function loadAndPlayAudio(file, loop = false, fadeIn = false, callback) {
 }
 
 // function to determine which track to play based on GPS coordinates
-function handleLocationChange(latitude, longitude) {
+async function handleLocationChange(latitude, longitude) {
     console.log(`handleLocationChange called with latitude: ${latitude}, longitude: ${longitude}`);
 
-    if (!userInitiatedPlayback) {
-        // if playback has not been initiated by user, do nothing
-        console.log("playback not initiated by user. Ignoring GPS location check.");
-        return;
+    if (!window.audioContextStarted) {
+        await userInteracted();
     }
-
+    
     // adjust the following conditions for actual location-based playback
-    if (latitude > 1.20 && latitude < 1.40 && longitude > 103.8100 && longitude < 103.8220) {
+    if (latitude > 1.3520 && latitude < 1.3530 && longitude > 103.8195 && longitude < 103.8200) {
         playTrack(tracks["location1"], "location1");
-    } else if (latitude > 22.5955 && latitude < 22.5960 && longitude > 113.9980 && longitude < 113.9990) {
+    } else if (latitude > 22.5530 && latitude < 22.5540 && longitude > 114.0955 && longitude < 114.0960) {
         playTrack(tracks["location2"], "location2");
-    } else if (latitude > 22.5930 && latitude < 22.5950 && longitude > 113.9970 && longitude < 113.9980) {
+    } else if (latitude > 22.5540 && latitude < 22.5550 && longitude > 114.0955 && longitude < 114.0960) {
         playTrack(tracks["location3"], "location3");
-    } else if (latitude > 22.5920 && latitude < 22.5930 && longitude > 113.9935 && longitude < 113.9950) {
+    } else if (latitude > 22.5530 && latitude < 22.5540 && longitude > 114.0940 && longitude < 114.9950) {
         playTrack(tracks["location4"], "location4");
-    } else if (latitude > 22.5920 && latitude < 22.5940 && longitude > 113.9930 && longitude < 113.9960) {
+    } else if (latitude > 22.5540 && latitude < 22.5545 && longitude > 114.0930 && longitude < 114.0940) {
         playTrack(tracks["location5"], "location5");
-    } else if (latitude > 22.5920 && latitude < 22.5930 && longitude > 113.9920 && longitude < 113.9940) {
+    } else if (latitude > 22.5530 && latitude < 22.5540 && longitude > 114.0930 && longitude < 114.0940) {
         playTrack(tracks["location6"], "location6");
     } else {
         console.log("no track assigned for this location.");
