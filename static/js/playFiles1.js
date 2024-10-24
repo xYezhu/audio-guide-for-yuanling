@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 window.audioContextStarted = window.audioContextStarted || false;
 
-
 let currentTrack = null;
 let fadeInDuration = 2000; // adjust as needed
 let fadeOutDuration = 2000; // adjust as needed
@@ -22,9 +21,9 @@ let tracks = {
     // add more below...
 };
 
-let userInitiatedPlayback = false; // flag to determine if playback has been started by user
 let isPlaying = false;
 let backgroundTrack = null;
+let isTrackLoading = false;
 
 async function userInteracted() {
     if (!window.audioContextStarted) {
@@ -42,7 +41,7 @@ async function userInteracted() {
 
 // background track
 function startBackgroundTrack() {
-    const backgroundFile = "static/audio/background2.mp3";
+    const backgroundFile = "static/audio/background1.mp3";
     loadAndPlayAudio(backgroundFile, true, true, function(player) {
         backgroundTrack = player;
         console.log("background track started.");
@@ -57,7 +56,6 @@ async function togglePlayback() {
         playButton.src = 'static/images/playButton.png';
         isPlaying = false;
     } else {
-        userInitiatedPlayback = true;
         isPlaying = true;
         playButton.src = 'static/images/pauseButton.png';
         console.log("user initiated playback. GPS-based playback now enabled.");
@@ -84,38 +82,32 @@ async function togglePlayback() {
                         handleLocationChange(latitude, longitude);
                     },
                     function(error) {
-                        console.error("error getting current position: ", error);
+                        console.error("Error getting current position: ", error);
                     },
                     { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
                 );
             } else {
-                console.error('geolocation is not supported by your browser.');
+                console.error('Geolocation is not supported by your browser.');
             }
         }
     }
 }
 
-
-// function to stop all playback including background
 function stopAllPlayback(userStopped = false) {
     if (currentTrack) {
-        // set fadeOut duration
-        currentTrack.fadeOut = fadeOutDuration / 1000; // in seconds
-        // stop playback with fade out
-        currentTrack.stop("+0"); // stops immediately with fade out applied
+        currentTrack.stop(); // stops immediately with fade out applied
         currentTrack = null;
         currentlyPlayingLocation = null;
+        isTrackLoading = false; // reset loading flag
     }
 
     if (backgroundTrack) {
-        backgroundTrack.fadeOut = fadeOutDuration / 1000; // in seconds
-        backgroundTrack.stop("+0");
+        backgroundTrack.stop(); // stops with fade out applied
         backgroundTrack = null;
         console.log("background track stopped.");
     }
 
     if (userStopped) {
-        userInitiatedPlayback = false;
         isPlaying = false;
         console.log("user stopped playback.");
     } else {
@@ -123,9 +115,8 @@ function stopAllPlayback(userStopped = false) {
     }
 }
 
-// function to play a track with fade-in and fade-out
 function playTrack(trackFile, locationKey) {
-    if (currentTrack && currentlyPlayingLocation === locationKey) return;
+    if ((currentTrack || isTrackLoading) && currentlyPlayingLocation === locationKey) return;
 
     if (currentTrack && currentlyPlayingLocation !== locationKey) {
         console.log('crossfading to new track...');
@@ -135,36 +126,46 @@ function playTrack(trackFile, locationKey) {
         // start the new track
         startNewTrack(trackFile, locationKey, true);
 
-        // fade out the old track
-        oldTrack.fadeOut = fadeOutDuration / 1000; // in seconds
-        oldTrack.stop("+0"); // stops with fade out applied
-    } else if (!currentTrack) {
+        // stop the old track
+        oldTrack.stop(); // stops with fade out applied
+    } else if (!currentTrack && !isTrackLoading) {
         startNewTrack(trackFile, locationKey, true);
     }
 }
 
-// function to start a new track with optional fade-in
 function startNewTrack(trackFile, locationKey, fadeIn = false) {
+    if (isTrackLoading) {
+        console.log('track is already loading. Skipping startNewTrack.');
+        return;
+    }
+    isTrackLoading = true; // set loading flag to true
+    currentlyPlayingLocation = locationKey; // set this immediately
+
     console.log(`attempting to start new track: ${trackFile}`);
 
     loadAndPlayAudio(trackFile, false, fadeIn, function(player) {
         currentTrack = player;
-        currentlyPlayingLocation = locationKey;
+        isTrackLoading = false; // reset loading flag
         console.log(`playing track: ${trackFile}`);
     });
 }
 
-// function to load and play audio files
 function loadAndPlayAudio(file, loop = false, fadeIn = false, callback) {
     const player = new Tone.Player({
         url: file,
         autostart: false,
         loop: loop,
+        fadeOut: fadeOutDuration / 1000, // set fadeOut here
         onload: () => {
             player.toDestination();
             player.fadeIn = fadeIn ? fadeInDuration / 1000 : 0;
             player.start();
             if (callback) callback(player);
+        },
+        onstop: () => {
+            // dispose of the player when it stops
+            player.dispose();
+            console.log(`player for ${file} stopped and disposed.`);
         },
         onerror: (error) => {
             console.error(`error loading ${file}:`, error);
@@ -172,14 +173,18 @@ function loadAndPlayAudio(file, loop = false, fadeIn = false, callback) {
     });
 }
 
-// function to determine which track to play based on GPS coordinates
 async function handleLocationChange(latitude, longitude) {
     console.log(`handleLocationChange called with latitude: ${latitude}, longitude: ${longitude}`);
+
+    if (!isPlaying) {
+        console.log("playback is not active. Ignoring GPS location check.");
+        return;
+    }
 
     if (!window.audioContextStarted) {
         await userInteracted();
     }
-    
+
     // adjust the following conditions for actual location-based playback
     if (latitude > 22.5525 && latitude < 22.5540 && longitude > 114.0940 && longitude < 114.0955) {
         playTrack(tracks["location1"], "location1");

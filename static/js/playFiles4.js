@@ -9,7 +9,7 @@ window.audioContextStarted = window.audioContextStarted || false;
 
 let currentTrack = null;
 let fadeInDuration = 2000; // adjust as needed
-let fadeOutDuration = 2000; // Adjust as needed
+let fadeOutDuration = 2000; // adjust as needed
 let currentlyPlayingLocation = null; // track which location's track is currently playing
 let tracks = {
     "location1": "static/audio/track1.mp3",
@@ -30,21 +30,21 @@ async function userInteracted() {
         try {
             await Tone.start();
             window.audioContextStarted = true;
-            console.log('Audio context started.');
+            console.log('audio context started.');
         } catch (error) {
-            console.error('Failed to start audio context:', error);
+            console.error('failed to start audio context:', error);
         }
     } else {
-        console.log('Audio context already started.');
+        console.log('audio context already started.');
     }
 }
 
 // background track
 function startBackgroundTrack() {
-    const backgroundFile = "static/audio/background2.mp3";
+    const backgroundFile = "static/audio/background4.mp3";
     loadAndPlayAudio(backgroundFile, true, true, function(player) {
         backgroundTrack = player;
-        console.log("Background track started.");
+        console.log("background track started.");
     });
 }
 
@@ -58,7 +58,7 @@ async function togglePlayback() {
     } else {
         isPlaying = true;
         playButton.src = 'static/images/pauseButton.png';
-        console.log("User initiated playback. GPS-based playback now enabled.");
+        console.log("user initiated playback. GPS-based playback now enabled.");
 
         // ensure the Tone.js audio context is started
         await userInteracted();
@@ -104,14 +104,14 @@ function stopAllPlayback(userStopped = false) {
     if (backgroundTrack) {
         backgroundTrack.stop(); // stops with fade out applied
         backgroundTrack = null;
-        console.log("Background track stopped.");
+        console.log("background track stopped.");
     }
 
     if (userStopped) {
         isPlaying = false;
-        console.log("User stopped playback.");
+        console.log("user stopped playback.");
     } else {
-        console.log("Playback stopped due to location change.");
+        console.log("playback stopped due to location change.");
     }
 }
 
@@ -119,7 +119,7 @@ function playTrack(trackFile, locationKey) {
     if ((currentTrack || isTrackLoading) && currentlyPlayingLocation === locationKey) return;
 
     if (currentTrack && currentlyPlayingLocation !== locationKey) {
-        console.log('Crossfading to new track...');
+        console.log('crossfading to new track...');
 
         let oldTrack = currentTrack;
 
@@ -135,18 +135,18 @@ function playTrack(trackFile, locationKey) {
 
 function startNewTrack(trackFile, locationKey, fadeIn = false) {
     if (isTrackLoading) {
-        console.log('Track is already loading. Skipping startNewTrack.');
+        console.log('track is already loading. Skipping startNewTrack.');
         return;
     }
     isTrackLoading = true; // set loading flag to true
     currentlyPlayingLocation = locationKey; // set this immediately
 
-    console.log(`Attempting to start new track: ${trackFile}`);
+    console.log(`attempting to start new track: ${trackFile}`);
 
     loadAndPlayAudio(trackFile, false, fadeIn, function(player) {
         currentTrack = player;
         isTrackLoading = false; // reset loading flag
-        console.log(`Playing track: ${trackFile}`);
+        console.log(`playing track: ${trackFile}`);
     });
 }
 
@@ -165,10 +165,10 @@ function loadAndPlayAudio(file, loop = false, fadeIn = false, callback) {
         onstop: () => {
             // dispose of the player when it stops
             player.dispose();
-            console.log(`Player for ${file} stopped and disposed.`);
+            console.log(`player for ${file} stopped and disposed.`);
         },
         onerror: (error) => {
-            console.error(`Error loading ${file}:`, error);
+            console.error(`error loading ${file}:`, error);
         }
     });
 }
@@ -177,7 +177,7 @@ async function handleLocationChange(latitude, longitude) {
     console.log(`handleLocationChange called with latitude: ${latitude}, longitude: ${longitude}`);
 
     if (!isPlaying) {
-        console.log("Playback is not active. Ignoring GPS location check.");
+        console.log("playback is not active. Ignoring GPS location check.");
         return;
     }
 
@@ -185,12 +185,12 @@ async function handleLocationChange(latitude, longitude) {
         await userInteracted();
     }
 
-    // adjust the following conditions for location-based playback
-    if (latitude > 22.5798 && latitude < 22.5810 && longitude > 113.9205 && longitude < 113.9210) {
+    // adjust the following conditions for actual location-based playback
+    if (latitude > 22.5525 && latitude < 22.5540 && longitude > 114.0940 && longitude < 114.0955) {
         playTrack(tracks["location1"], "location1");
-    } else if (latitude > 22.5798 && latitude < 22.5805 && longitude > 113.9200 && longitude < 113.9205) {
+    } else if (latitude > 22.5530 && latitude < 22.5540 && longitude > 114.0955 && longitude < 114.0960) {
         playTrack(tracks["location2"], "location2");
-    } else if (latitude > 22.5790 && latitude < 22.5800 && longitude > 113.9195 && longitude < 113.9200) {
+    } else if (latitude > 22.5540 && latitude < 22.5550 && longitude > 114.0955 && longitude < 114.0960) {
         playTrack(tracks["location3"], "location3");
     } else if (latitude > 22.5530 && latitude < 22.5540 && longitude > 114.0940 && longitude < 114.9950) {
         playTrack(tracks["location4"], "location4");
