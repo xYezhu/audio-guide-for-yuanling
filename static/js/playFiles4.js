@@ -125,6 +125,7 @@ function stopAllPlayback(userStopped = false) {
 
 // function to play a track with fade-in and fade-out
 function playTrack(trackFile, locationKey) {
+    // only play each track once
     if (currentTrack && currentlyPlayingLocation === locationKey) return;
 
     if (currentTrack && currentlyPlayingLocation !== locationKey) {
@@ -181,11 +182,11 @@ async function handleLocationChange(latitude, longitude) {
     }
     
     // adjust the following conditions for actual location-based playback
-    if (latitude > 1.3520 && latitude < 1.3525 && longitude > 103.8195 && longitude < 103.8200) {
+    if (latitude > 22.5798 && latitude < 22.5810 && longitude > 113.9205 && longitude < 113.9210) {
         playTrack(tracks["location1"], "location1");
-    } else if (latitude > 1.3525 && latitude < 1.3530 && longitude > 103.8190 && longitude < 103.8200) {
+    } else if (latitude > 22.5798 && latitude < 22.5805 && longitude > 113.9200 && longitude < 113.9205) {
         playTrack(tracks["location2"], "location2");
-    } else if (latitude > 1.3530 && latitude < 1.3545 && longitude > 103.8190 && longitude < 103.8200) {
+    } else if (latitude > 22.5790 && latitude < 22.5800 && longitude > 113.9195 && longitude < 113.9200) {
         playTrack(tracks["location3"], "location3");
     } else if (latitude > 22.5530 && latitude < 22.5540 && longitude > 114.0940 && longitude < 114.9950) {
         playTrack(tracks["location4"], "location4");
