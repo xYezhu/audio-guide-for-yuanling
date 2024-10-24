@@ -27,12 +27,19 @@ To define your specific location, modify the code in handleLocationChange functi
     } else if (...){
             ...        
     }
+
+**3. Adjust the fade in and fade out**
+
+To adjust the fade in and fade out of your tracks, navigate to the top of playFiles.js and edit the code below:
+
+    let fadeInDuration = 2000; // adjust as needed
+    let fadeOutDuration = 2000; // adjust as needed
     
-**3. Upload your images**
+**4. Upload your images**
 
 To upload your own group image, simply swap the image inside image folder. Note: please keep the name of your image as image1-4, following your group number.
 
-**4. Change the group name**
+**5. Change the group name**
 
 To change your group project name, navigate to index.html, find the navigation buttons. As an example, if you want to change 'group1' to 'yuan ling street', modify it as below;
 
