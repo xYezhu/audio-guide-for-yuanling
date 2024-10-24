@@ -25,6 +25,24 @@ let tracks = {
 let userInitiatedPlayback = false; // flag to determine if playback has been started by user
 let isPlaying = false;
 let backgroundTrack = null;
+let isTrackLoading = false; 
+
+function startNewTrack(trackFile, locationKey, fadeIn = false) {
+    if (isTrackLoading) {
+        console.log('Track is already loading. Skipping startNewTrack.');
+        return;
+    }
+    isTrackLoading = true; // set loading flag to true
+    currentlyPlayingLocation = locationKey; // set this immediately to prevent multiple playback
+
+    console.log(`Attempting to start new track: ${trackFile}`);
+
+    loadAndPlayAudio(trackFile, false, fadeIn, function(player) {
+        currentTrack = player;
+        isTrackLoading = false; // reset loading flag
+        console.log(`Playing track: ${trackFile}`);
+    });
+}
 
 async function userInteracted() {
     if (!window.audioContextStarted) {
@@ -99,27 +117,25 @@ async function togglePlayback() {
 // function to stop all playback including background
 function stopAllPlayback(userStopped = false) {
     if (currentTrack) {
-        // set fadeOut duration
-        currentTrack.fadeOut = fadeOutDuration / 1000; // in seconds
-        // stop playback with fade out
-        currentTrack.stop("+0"); // stops immediately with fade out applied
+        currentTrack.stop(); // stops immediately with fade out applied
+        // currentTrack.dispose(); // disposal handled in onstop callback
         currentTrack = null;
         currentlyPlayingLocation = null;
     }
 
     if (backgroundTrack) {
-        backgroundTrack.fadeOut = fadeOutDuration / 1000; // in seconds
-        backgroundTrack.stop("+0");
+        backgroundTrack.stop(); // s    tops with fade out applied
+        // backgroundTrack.dispose(); // Disposal handled in onstop callback
         backgroundTrack = null;
-        console.log("background track stopped.");
+        console.log("Background track stopped.");
     }
 
     if (userStopped) {
         userInitiatedPlayback = false;
         isPlaying = false;
-        console.log("user stopped playback.");
+        console.log("User stopped playback.");
     } else {
-        console.log("playback stopped due to location change.");
+        console.log("Playback stopped due to location change.");
     }
 }
 
@@ -161,17 +177,24 @@ function loadAndPlayAudio(file, loop = false, fadeIn = false, callback) {
         url: file,
         autostart: false,
         loop: loop,
+        fadeOut: fadeOutDuration / 1000, // Set fadeOut here
         onload: () => {
             player.toDestination();
             player.fadeIn = fadeIn ? fadeInDuration / 1000 : 0;
             player.start();
             if (callback) callback(player);
         },
+        onstop: () => {
+            // dispose of the player when it stops
+            player.dispose();
+            console.log(`Player for ${file} stopped and disposed.`);
+        },
         onerror: (error) => {
-            console.error(`error loading ${file}:`, error);
+            console.error(`Error loading ${file}:`, error);
         }
     });
 }
+
 
 // function to determine which track to play based on GPS coordinates
 async function handleLocationChange(latitude, longitude) {
