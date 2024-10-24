@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+
 window.audioContextStarted = window.audioContextStarted || false;
 let currentTrack = null;
 let fadeInDuration = 2000; // adjust as needed
@@ -23,6 +24,67 @@ let tracks = {
 let userInitiatedPlayback = false; // flag to determine if playback has been started by user
 let isPlaying = false;
 let backgroundTrack = null;
+
+let locations = [
+    {
+        key: "location1",
+        latitude: 22.5530,
+        longitude: 114.0941,
+        radius: 50, // in meters
+    },
+    {
+        key: "location2",
+        latitude: 22.5531,
+        longitude: 114.0957,
+        radius: 50, // in meters
+    },
+    {
+        key: "location3",
+        latitude: 22.5540,
+        longitude: 114.0960,
+        radius: 50, // in meters
+    },
+    {
+        key: "location4",
+        latitude: 22.5542,
+        longitude: 114.0944,
+        radius: 50, // in meters
+    },
+    {
+        key: "location5",
+        latitude: 22.5541,
+        longitude: 114.0932,
+        radius: 50, // in meters
+    },
+    {
+        key: "location6",
+        latitude: 22.5531,
+        longitude: 114.0932,
+        radius: 50, // in meters
+    }
+    // Add more locations as needed...
+];
+
+// Function to calculate distance between two coordinates in meters
+function getDistanceFromLatLonInMeters(lat1, lon1, lat2, lon2) {
+    const R = 6371000; // Radius of Earth in meters
+    const dLat = deg2rad(lat2 - lat1);  // deg2rad function below
+    const dLon = deg2rad(lon2 - lon1); 
+    const a = 
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2)
+        ; 
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); 
+    const d = R * c; // Distance in meters
+    return d;
+}
+
+function deg2rad(deg) {
+    return deg * (Math.PI/180);
+}
+
+
 
 async function userInteracted() {
     if (!window.audioContextStarted) {
@@ -151,7 +213,7 @@ function loadAndPlayAudio(file, loop = false, fadeIn = false, callback) {
     });
 }
 
-// function to determine which track to play based on GPS coordinates
+// Updated handleLocationChange function
 function handleLocationChange(latitude, longitude) {
     console.log(`handleLocationChange called with latitude: ${latitude}, longitude: ${longitude}`);
 
@@ -161,22 +223,21 @@ function handleLocationChange(latitude, longitude) {
         return;
     }
 
-    // adjust the following conditions for actual location-based playback
-    if (latitude > 1.20 && latitude < 1.40 && longitude > 103.8100 && longitude < 103.8220) {
-        playTrack(tracks["location1"], "location1");
-    } else if (latitude > 22.5955 && latitude < 22.5960 && longitude > 113.9980 && longitude < 113.9990) {
-        playTrack(tracks["location2"], "location2");
-    } else if (latitude > 22.5930 && latitude < 22.5950 && longitude > 113.9970 && longitude < 113.9980) {
-        playTrack(tracks["location3"], "location3");
-    } else if (latitude > 22.5920 && latitude < 22.5930 && longitude > 113.9935 && longitude < 113.9950) {
-        playTrack(tracks["location4"], "location4");
-    } else if (latitude > 22.5920 && latitude < 22.5940 && longitude > 113.9930 && longitude < 113.9960) {
-        playTrack(tracks["location5"], "location5");
-    } else if (latitude > 22.5920 && latitude < 22.5930 && longitude > 113.9920 && longitude < 113.9940) {
-        playTrack(tracks["location6"], "location6");
-    } else {
+    let locationFound = false;
+
+    for (let i = 0; i < locations.length; i++) {
+        let loc = locations[i];
+        let distance = getDistanceFromLatLonInMeters(latitude, longitude, loc.latitude, loc.longitude);
+        if (distance <= loc.radius) {
+            playTrack(tracks[loc.key], loc.key);
+            locationFound = true;
+            break;
+        }
+    }
+
+    if (!locationFound) {
         console.log("no track assigned for this location.");
-        // optionally, stop the current track if not in any location
+        // Optionally, stop the current track if not in any location
         if (currentTrack) {
             currentTrack.fadeOut = fadeOutDuration / 1000; // in seconds
             currentTrack.stop("+0"); // stops with fade out applied
@@ -185,6 +246,41 @@ function handleLocationChange(latitude, longitude) {
         }
     }
 }
+
+// function to determine which track to play based on GPS coordinates
+// function handleLocationChange(latitude, longitude) {
+//     console.log(`handleLocationChange called with latitude: ${latitude}, longitude: ${longitude}`);
+
+//     if (!userInitiatedPlayback) {
+//         // if playback has not been initiated by user, do nothing
+//         console.log("playback not initiated by user. Ignoring GPS location check.");
+//         return;
+//     }
+
+//     // adjust the following conditions for actual location-based playback
+//     if (latitude > 1.20 && latitude < 1.40 && longitude > 103.8100 && longitude < 103.8220) {
+//         playTrack(tracks["location1"], "location1");
+//     } else if (latitude > 22.5955 && latitude < 22.5960 && longitude > 113.9980 && longitude < 113.9990) {
+//         playTrack(tracks["location2"], "location2");
+//     } else if (latitude > 22.5930 && latitude < 22.5950 && longitude > 113.9970 && longitude < 113.9980) {
+//         playTrack(tracks["location3"], "location3");
+//     } else if (latitude > 22.5920 && latitude < 22.5930 && longitude > 113.9935 && longitude < 113.9950) {
+//         playTrack(tracks["location4"], "location4");
+//     } else if (latitude > 22.5920 && latitude < 22.5940 && longitude > 113.9930 && longitude < 113.9960) {
+//         playTrack(tracks["location5"], "location5");
+//     } else if (latitude > 22.5920 && latitude < 22.5930 && longitude > 113.9920 && longitude < 113.9940) {
+//         playTrack(tracks["location6"], "location6");
+//     } else {
+//         console.log("no track assigned for this location.");
+//         // optionally, stop the current track if not in any location
+//         if (currentTrack) {
+//             currentTrack.fadeOut = fadeOutDuration / 1000; // in seconds
+//             currentTrack.stop("+0"); // stops with fade out applied
+//             currentTrack = null;
+//             currentlyPlayingLocation = null;
+//         }
+//     }
+// }
 
 // attach handleLocationChange to the window object so it can be accessed globally
 window.handleLocationChange = handleLocationChange;
