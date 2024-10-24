@@ -32,8 +32,8 @@ To define your specific location, modify the code in handleLocationChange functi
 
 To adjust the fade in and fade out of your tracks, navigate to the top of playFiles.js and edit the code below:
 
-    let fadeInDuration = 2000; // adjust as needed
-    let fadeOutDuration = 2000; // adjust as needed
+    let fadeInDuration = 2000; // millisecond, adjust as needed
+    let fadeOutDuration = 2000; // millisecond, adjust as needed
     
 **4. Upload your images**
 
