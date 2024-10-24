@@ -181,11 +181,11 @@ async function handleLocationChange(latitude, longitude) {
     }
     
     // adjust the following conditions for actual location-based playback
-    if (latitude > 1.3520 && latitude < 1.3530 && longitude > 103.8195 && longitude < 103.8200) {
+    if (latitude > 1.3520 && latitude < 1.3525 && longitude > 103.8195 && longitude < 103.8200) {
         playTrack(tracks["location1"], "location1");
-    } else if (latitude > 22.5530 && latitude < 22.5540 && longitude > 114.0955 && longitude < 114.0960) {
+    } else if (latitude > 1.3525 && latitude < 1.3530 && longitude > 103.8190 && longitude < 103.8200) {
         playTrack(tracks["location2"], "location2");
-    } else if (latitude > 22.5540 && latitude < 22.5550 && longitude > 114.0955 && longitude < 114.0960) {
+    } else if (latitude > 1.3530 && latitude < 1.3545 && longitude > 103.8190 && longitude < 103.8200) {
         playTrack(tracks["location3"], "location3");
     } else if (latitude > 22.5530 && latitude < 22.5540 && longitude > 114.0940 && longitude < 114.9950) {
         playTrack(tracks["location4"], "location4");
