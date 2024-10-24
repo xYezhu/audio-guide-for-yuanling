@@ -162,7 +162,7 @@ function handleLocationChange(latitude, longitude) {
     }
 
     // adjust the following conditions for actual location-based playback
-    if (latitude > 1.20 && latitude < 1.40 && longitude > 103.8100 && longitude < 103.8220) {
+    if (latitude > 22.5960 && latitude < 23 && longitude > 113.9980 && longitude < 114) {
         playTrack(tracks["location1"], "location1");
     } else if (latitude > 22.5955 && latitude < 22.5960 && longitude > 113.9980 && longitude < 113.9990) {
         playTrack(tracks["location2"], "location2");
