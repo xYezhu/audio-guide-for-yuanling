@@ -150,7 +150,7 @@ function startNewTrack(trackFile, locationKey, fadeIn = false) {
     });
 }
 
-function loadAndPlayAudio(file, loop = false, fadeIn = false, callback) {
+function loadAndPlayAudio(file, loop = true, fadeIn = false, callback) {
     const player = new Tone.Player({
         url: file,
         autostart: false,
