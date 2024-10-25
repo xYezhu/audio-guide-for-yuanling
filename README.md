@@ -9,7 +9,7 @@ Inside 'static', you could upload your sound design files to 'audio'. As an exam
          // add more below...   
     ];
 
-After that, the audio files needs to be assigned to the related location inside playFile.js, if you are group1, update playFiles1.js, if you are group2, update playFiles2.js. and so on:
+After that, the audio files needs to be assigned to the related location inside playFile.js (static-js), if you are group1, update playFiles1.js, if you are group2, update playFiles2.js. and so on:
 
     let tracks = {
         "location1": "static/audio/track1.mp3",
