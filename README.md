@@ -79,7 +79,7 @@ The testing page provides a comprehensive overview of how your project will soun
 
 1. Use WASD on your keyboard to move the red dot.
 2. Use the add button to create a new square, and when holding the square and press delete on your keyboard, the selected square will be deleted. Squares can be drag and moved with mouse.
-3. Press 'p' on your keyboard to print the geo location of all the squares, which you could use to set the range in playFiles accordingly.
+3. Press 'p' or 'P' on your keyboard to print the geo location of all the squares, which you could use to set the range in playFiles accordingly.
 
 
 © Hao ZHENG, Marcel SAGESSER, SUSTech School of Design, 2024
