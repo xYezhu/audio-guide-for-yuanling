@@ -73,7 +73,13 @@ after:
         <div class="group-content">yuan ling street</div>
         
 
-## Testing Page Guide ##
+### Testing Page Guide ###
+
+The testing page provides a comprehensive overview of how your project will sound in action. The red dot represents the user, and its pseudo-geolocation is displayed below the map as it moves. Red squares indicate locations that trigger different soundtracks, with each square linked to its corresponding track. For example, entering square 1 will play track 1. Below are detailed instructions on how to use the testing page.
+
+1. Use WASD on your keyboard to move the red dot.
+2. Use the add button to create a new square, and when holding the square and press delete on your keyboard, the selected square will be deleted. Squares can be drag and moved with mouse.
+3. Press 'p' on your keyboard to print the geo location of all the squares, which you could use to set the range in playFiles accordingly.
 
 
 © Hao ZHENG, Marcel SAGESSER, SUSTech School of Design, 2024
