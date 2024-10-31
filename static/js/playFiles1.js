@@ -12,12 +12,12 @@ let fadeInDuration = 2000; // adjust as needed
 let fadeOutDuration = 2000; // adjust as needed
 let currentlyPlayingLocation = null; // track which location's track is currently playing
 let tracks = {
-    "location1": "static/audio/track1.mp3",
-    "location2": "static/audio/track2.mp3",
-    "location3": "static/audio/track3.mp3",
-    "location4": "static/audio/track4.mp3",
-    "location5": "static/audio/track5.mp3",
-    "location6": "static/audio/track6.mp3"
+    "location1": "static/audio/group1/group1_track1.mp3",
+    "location2": "static/audio/group1/group1_track2.mp3",
+    "location3": "static/audio/group1/group1_track3.mp3",
+    "location4": "static/audio/group1/group1_track4.mp3",
+    "location5": "static/audio/group1/group1_track5.mp3",
+    "location6": "static/audio/group1/group1_track6.mp3"
     // add more below...
 };
 
@@ -46,6 +46,7 @@ function startBackgroundTrack() {
         backgroundTrack = player;
         console.log("background track started.");
     });
+    backgroundTrack.volume.value = -12; // set the background track volume here
 }
 
 async function togglePlayback() {

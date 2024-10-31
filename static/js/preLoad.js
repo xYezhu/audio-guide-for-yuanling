@@ -5,17 +5,47 @@ window.preloadingComplete = window.preloadingComplete || false;
 function startPreloading() {
     if (!window.preloadingComplete) {
         const audioFiles = [
-            "static/audio/track1.mp3",
-            "static/audio/track2.mp3",
-            "static/audio/track3.mp3",
-            "static/audio/track4.mp3",
-            "static/audio/track5.mp3",
-            "static/audio/track6.mp3",
+            // group 1
+            "static/audio/group1/group1_track1.mp3",
+            "static/audio/group1/group1_track2.mp3",
+            "static/audio/group1/group1_track3.mp3",
+            "static/audio/group1/group1_track4.mp3",
+            "static/audio/group1/group1_track5.mp3",
+            "static/audio/group1/group1_track6.mp3",
+            // add more below...
+
+            // group 2
+            "static/audio/group2/group2_track1.mp3",
+            "static/audio/group2/group2_track2.mp3",
+            "static/audio/group2/group2_track3.mp3",
+            "static/audio/group2/group2_track4.mp3",
+            "static/audio/group2/group2_track5.mp3",
+            "static/audio/group2/group2_track6.mp3",
+            // add more below...
+
+            // group 3
+            "static/audio/group3/group3_track1.mp3",
+            "static/audio/group3/group3_track2.mp3",
+            "static/audio/group3/group3_track3.mp3",
+            "static/audio/group3/group3_track4.mp3",
+            "static/audio/group3/group3_track5.mp3",
+            "static/audio/group3/group3_track6.mp3",
+            // add more below...
+
+            // group 4
+            "static/audio/group4/group4_track1.mp3",
+            "static/audio/group4/group4_track2.mp3",
+            "static/audio/group4/group4_track3.mp3",
+            "static/audio/group4/group4_track4.mp3",
+            "static/audio/group4/group4_track5.mp3",
+            "static/audio/group4/group4_track6.mp3",
+            // add more below...
+
+            // background track
             "static/audio/background1.mp3",
             "static/audio/background2.mp3",
             "static/audio/background3.mp3",
             "static/audio/background4.mp3"
-            // add more below...
 
         ];
 

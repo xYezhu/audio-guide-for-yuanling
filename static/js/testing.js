@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', function () {
     latLonDisplay.style.marginBottom = '0px';
     latLonDisplay.style.color = '#596a7b';
     latLonDisplay.style.textAlign = 'center';
-    latLonDisplay.style.display = 'block';
+    latLonDisplay.style.display = 'flex';
+    latLonDisplay.style.flexDirection = 'column';  
     latLonDisplay.style.margin = '180px auto 0 auto';
 
     // insert it before the canvasContainer
@@ -27,15 +28,55 @@ document.addEventListener('DOMContentLoaded', function () {
         "location5": "static/audio/track5.mp3",
         "location6": "static/audio/track6.mp3"
     };
-    let trackPlayers = {}; // To keep track of all playing tracks
+    let trackPlayers = {}; // to keep track of all playing tracks
     let playingSquares = [];
+
+    // volume sliders
+    let backgroundVolumeSlider = document.getElementById('backgroundVolume');
+    let tracksVolumeSlider = document.getElementById('tracksVolume');
+
+    // create volume display labels
+    let backgroundVolumeDisplay = document.createElement('span');
+    backgroundVolumeDisplay.id = 'backgroundVolumeDisplay';
+    backgroundVolumeDisplay.style.marginLeft = '10px';
+    backgroundVolumeSlider.parentNode.appendChild(backgroundVolumeDisplay);
+
+    let tracksVolumeDisplay = document.createElement('span');
+    tracksVolumeDisplay.id = 'tracksVolumeDisplay';
+    tracksVolumeDisplay.style.marginLeft = '10px';
+    tracksVolumeSlider.parentNode.appendChild(tracksVolumeDisplay);
+
+    // set initial volume levels
+    let backgroundVolume = -12;
+    let tracksVolume = -12;
+
+    // update volume displays
+    backgroundVolumeDisplay.textContent = `${backgroundVolume} dB`;
+    tracksVolumeDisplay.textContent = `${tracksVolume} dB`;
+
+    backgroundVolumeSlider.addEventListener('input', function () {
+        backgroundVolume = Tone.gainToDb(parseFloat(backgroundVolumeSlider.value));
+        backgroundVolumeDisplay.textContent = `${backgroundVolume.toFixed(1)} dB`;
+        if (backgroundTrack) {
+            backgroundTrack.volume.rampTo(backgroundVolume, 0.1);
+        }
+    });
+
+    tracksVolumeSlider.addEventListener('input', function () {
+        tracksVolume = Tone.gainToDb(parseFloat(tracksVolumeSlider.value));
+        tracksVolumeDisplay.textContent = `${tracksVolume.toFixed(1)} dB`;
+        Object.values(trackPlayers).forEach(player => {
+            player.volume.rampTo(tracksVolume, 0.1);
+        });
+    });
+
 
     async function userInteracted() {
         try {
             await Tone.start();
-            console.log('Audio context started');
+            console.log('audio context started');
         } catch (error) {
-            console.error('Failed to start audio context:', error);
+            console.error('failed to start audio context:', error);
         }
     }
 
@@ -43,7 +84,8 @@ document.addEventListener('DOMContentLoaded', function () {
         backgroundTrack = new Tone.Player({
             url: 'static/audio/background1.mp3',
             loop: true,
-            autostart: true
+            autostart: true,
+            volume: backgroundVolume
         }).toDestination();
         backgroundTrack.fadeIn = 2;
     }
@@ -92,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // create + button
             let addButton = p.createButton('+');
-            addButton.position(p.width * 0.9, p.height * 0.25);
+            addButton.position(p.width, p.height * 0.25);
             addButton.style('background-color', '#92b7c1');
             addButton.style('color', 'white');
             addButton.style('font-size', '40px');
@@ -111,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let geoCoords = imageToGeo(dotX, dotY);
 
             // display the coordinates
-            latLonDisplay.innerHTML = `Latitude: ${geoCoords.latitude.toFixed(4)}<br>Longitude: ${geoCoords.longitude.toFixed(4)}`;
+            latLonDisplay.innerHTML = `Latitude: ${geoCoords.latitude.toFixed(4)}, Longitude: ${geoCoords.longitude.toFixed(4)}`;
 
             const step = 1;
             if (moveW) {
@@ -181,19 +223,31 @@ document.addEventListener('DOMContentLoaded', function () {
                     saveBlueSquares(); // save squares after removing
                 }
             } else if (p.keyCode === p.UP_ARROW) {
-                // Increase size
+                // increase height
                 let draggingSquare = blueSquares.find(sq => sq.dragging);
                 if (draggingSquare) {
-                    draggingSquare.w = p.min(draggingSquare.w + 5, canvasSize);
                     draggingSquare.h = p.min(draggingSquare.h + 5, canvasSize);
                     saveBlueSquares(); // save changes after resizing
                 }
             } else if (p.keyCode === p.DOWN_ARROW) {
-                // Decrease size
+                // decrease height
                 let draggingSquare = blueSquares.find(sq => sq.dragging);
                 if (draggingSquare) {
-                    draggingSquare.w = p.max(draggingSquare.w - 5, 10);
                     draggingSquare.h = p.max(draggingSquare.h - 5, 10);
+                    saveBlueSquares(); // save changes after resizing
+                }
+            } else if (p.keyCode === p.LEFT_ARROW) {
+                // decrease width
+                let draggingSquare = blueSquares.find(sq => sq.dragging);
+                if (draggingSquare) {
+                    draggingSquare.w = p.min(draggingSquare.w - 5, canvasSize);
+                    saveBlueSquares(); // save changes after resizing
+                }
+            } else if (p.keyCode === p.RIGHT_ARROW) {
+                // increase width
+                let draggingSquare = blueSquares.find(sq => sq.dragging);
+                if (draggingSquare) {
+                    draggingSquare.w = p.max(draggingSquare.w + 5, 10);
                     saveBlueSquares(); // save changes after resizing
                 }
             }
@@ -208,6 +262,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 moveA = false;
             } else if (p.key === 'd' || p.key === 'D') {
                 moveD = false;
+            } else if(p.key === 'p' || p.key === 'P') {
+                blueSquares.forEach(square => {
+                    let topRightGeo = imageToGeo(square.x + square.w, square.y);
+                    let bottomLeftGeo = imageToGeo(square.x, square.y + square.h);
+                    console.log(`square${square.number}: bottom left lat: ${bottomLeftGeo.latitude.toFixed(4)}, long: ${bottomLeftGeo.longitude.toFixed(4)}, top right lat: ${topRightGeo.latitude.toFixed(4)}, long: ${topRightGeo.longitude.toFixed(4)}`);
+                });
             }
         };
 
@@ -242,21 +302,21 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             if (totalWeight > 0) {
-                // Normalize weights
+                // normalize weights
                 squareWeights.forEach(item => {
                     item.weight /= totalWeight;
                 });
 
                 let currentPlayingSquares = squareWeights.map(item => item.square.number);
 
-                // Start or adjust tracks
+                // start or adjust tracks
                 squareWeights.forEach(item => {
                     let squareNumber = item.square.number;
                     let weight = item.weight;
                     let trackKey = `location${squareNumber}`;
                     if (tracks[trackKey]) {
                         if (!trackPlayers[squareNumber]) {
-                            // Start the track
+                            // start the track
                             trackPlayers[squareNumber] = new Tone.Player({
                                 url: tracks[trackKey],
                                 loop: true,
@@ -264,17 +324,17 @@ document.addEventListener('DOMContentLoaded', function () {
                                 autostart: true
                             }).toDestination();
                         }
-                        // Adjust the volume
+                        // adjust the volume
                         trackPlayers[squareNumber].volume.rampTo(Tone.gainToDb(weight), 0.1);
                     }
                 });
 
-                // Fade out and stop tracks that are no longer needed
+                // fade out and stop tracks that are no longer needed
                 playingSquares.forEach(squareNumber => {
                     if (!currentPlayingSquares.includes(squareNumber)) {
                         if (trackPlayers[squareNumber]) {
                             trackPlayers[squareNumber].volume.rampTo(-Infinity, 0.5);
-                            // Stop after fading out
+                            // stop after fading out
                             setTimeout(() => {
                                 trackPlayers[squareNumber].stop();
                                 delete trackPlayers[squareNumber];
@@ -283,10 +343,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 });
 
-                // Update playingSquares
+                // update playingSquares
                 playingSquares = currentPlayingSquares.slice();
             } else {
-                // No squares are active, fade out all tracks
+                // no squares are active, fade out all tracks
                 playingSquares.forEach(squareNumber => {
                     if (trackPlayers[squareNumber]) {
                         trackPlayers[squareNumber].volume.rampTo(-Infinity, 0.5);
@@ -301,17 +361,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         function getWeight(square, dotX, dotY) {
-            // Compute the distance from the red dot to the center of the square
+            // compute the distance from the red dot to the center of the square
             let centerX = square.x + square.w / 2;
             let centerY = square.y + square.h / 2;
             let dx = dotX - centerX;
             let dy = dotY - centerY;
             let distance = Math.sqrt(dx * dx + dy * dy);
 
-            // Maximum distance is half the diagonal of the square
+            // maximum distance is half the diagonal of the square
             let maxDistance = Math.sqrt((square.w / 2) ** 2 + (square.h / 2) ** 2);
 
-            // If the dot is inside the square, weight is based on proximity to center
+            // if the dot is inside the square, weight is based on proximity to center
             if (square.contains(dotX, dotY)) {
                 return 1 - (distance / maxDistance);
             } else {
@@ -389,7 +449,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             showNumber() {
-                p.fill(255, 255, 255);
+                p.fill('#942023');
                 p.textSize(this.w * 0.8);
                 p.textAlign(p.CENTER, p.CENTER);
                 p.textFont('Arial');

@@ -76,10 +76,10 @@ label {
 }
 
 #canvasContainer {
-    position: absolute;
+    position: relative;
     width: 800px;
     height: 800px;
-    top: 50%;
+    top: 20%;
     left: 50%;
     transform: translate(-50%, 20%);
 }
@@ -94,10 +94,65 @@ label {
 }
 
 canvas {
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
     z-index: 1;
+}
+
+.volume-controls {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    top: 0%;
+    left: 50%;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: #596a7b;
+}
+
+.volume-controls label {
+    margin: 5px 0;
+}
+
+.volume-controls input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 200px;
+    height: 18px;
+    background: #ffffff;
+    border-radius: 5px;
+    outline: none;
+    margin-right: 10px;
+}
+
+.volume-controls input[type="range"]:hover {
+    opacity: 1;
+}
+
+.volume-controls input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #92b7c1;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.volume-controls input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #92b7c1;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+#backgroundVolumeDisplay, #tracksVolumeDisplay {
+    font-size: 24px;
+    color: #34495e;
+    margin-left: 5px;
 }
 
 .body-foot {

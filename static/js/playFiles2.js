@@ -12,12 +12,12 @@ let fadeInDuration = 2000; // adjust as needed
 let fadeOutDuration = 2000; // adjust as needed
 let currentlyPlayingLocation = null; // track which location's track is currently playing
 let tracks = {
-    "location1": "static/audio/track1.mp3",
-    "location2": "static/audio/track2.mp3",
-    "location3": "static/audio/track3.mp3",
-    "location4": "static/audio/track4.mp3",
-    "location5": "static/audio/track5.mp3",
-    "location6": "static/audio/track6.mp3"
+    "location1": "static/audio/group2/group2_track1.mp3",
+    "location2": "static/audio/group2/group2_track2.mp3",
+    "location3": "static/audio/group2/group2_track3.mp3",
+    "location4": "static/audio/group2/group2_track4.mp3",
+    "location5": "static/audio/group2/group2_track5.mp3",
+    "location6": "static/audio/group2/group2_track6.mp3"
     // add more below...
 };
 
@@ -41,11 +41,12 @@ async function userInteracted() {
 
 // background track
 function startBackgroundTrack() {
-    const backgroundFile = "static/audio/background2.mp3";
+    const backgroundFile = "static/audio/background1.mp3";
     loadAndPlayAudio(backgroundFile, true, true, function(player) {
         backgroundTrack = player;
         console.log("background track started.");
     });
+    backgroundTrack.volume.value = -12; // set the background track volume here
 }
 
 async function togglePlayback() {
@@ -150,7 +151,7 @@ function startNewTrack(trackFile, locationKey, fadeIn = false) {
     });
 }
 
-function loadAndPlayAudio(file, loop = true, fadeIn = false, callback) {
+function loadAndPlayAudio(file, loop = true, fadeIn = false, callback, volume = -12) {
     const player = new Tone.Player({
         url: file,
         autostart: false,
@@ -158,6 +159,7 @@ function loadAndPlayAudio(file, loop = true, fadeIn = false, callback) {
         fadeOut: fadeOutDuration / 1000, // set fadeOut here
         onload: () => {
             player.toDestination();
+            player.volume.value = volume;
             player.fadeIn = fadeIn ? fadeInDuration / 1000 : 0;
             player.start();
             if (callback) callback(player);

@@ -13,8 +13,17 @@
 <body>
     <img src="static/images/return.png" alt="back to home" class="back-button" onclick="window.location.href='index.html'">
     <img id="playButton" src="static/images/playButton.png" alt="play" class="play-button">
+    
     <!-- canvas container for the testing map -->
     <div id="canvasContainer"></div>
+</div>
+
+<div class="volume-controls">
+    <label for="backgroundVolume">Background:</label>
+    <input type="range" id="backgroundVolume" min="0" max="1" step="0.01" value="0.5">
+
+    <label for="tracksVolume">Tracks:</label>
+    <input type="range" id="tracksVolume" min="0" max="1" step="0.01" value="0.5">
 </div>
 
     <!-- footer -->

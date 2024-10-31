@@ -1,18 +1,20 @@
 This audio guide prototype for YuanLing Street includes a step-by-step tutorial on uploading your work to the application. To start using this project, you need to create your own copy by forking the repository. To do this, click the “Fork” button at the top right corner of this page. This will create a personal copy of the repository under your own GitHub account. You can then clone your fork to your local machine to begin working on it. Remember, any changes you push to your forked repository won’t affect the original project, so feel free to experiment!
 
+## Development Guide ##
+
 **1. Upload your audio files**
 
-Inside 'static', you could upload your sound design files to 'audio'. As an example, when you upload 'track1.mp3', it needs to be preloaded in the home page. To acheive that, add the files inside preLoad.js as follows:
+Inside 'static', you could upload your sound design files to 'audio'. As an example, when you upload 'group1_track1.mp3', it needs to be preloaded in the home page. To acheive that, add the files inside preLoad.js as follows:
 
     const audioFiles = [
-        "static/audio/track1.mp3",
+        "static/audio/group1/group1_track1.mp3",
          // add more below...   
     ];
 
 After that, the audio files needs to be assigned to the related location inside playFile.js (static-js), if you are group1, update playFiles1.js, if you are group2, update playFiles2.js. and so on:
 
     let tracks = {
-        "location1": "static/audio/track1.mp3",
+        "location1": "static/audio/group1/group1_track1.mp3",
         // add more below...
     };
 
@@ -34,12 +36,29 @@ To adjust the fade in and fade out of your tracks, navigate to the top of playFi
 
     let fadeInDuration = 2000; // millisecond, adjust as needed
     let fadeOutDuration = 2000; // millisecond, adjust as needed
+
+**3. Adjust the track volume**
+
+To adjust the background track volume and other track volume, update the number in functions below (inside playFiles):
+
+    function startBackgroundTrack() {
+        const backgroundFile = "static/audio/background1.mp3";
+        loadAndPlayAudio(backgroundFile, true, true, function(player) {
+            backgroundTrack = player;
+            console.log("background track started.");
+        });
+        backgroundTrack.volume.value = -12; // set the background track volume here
+    }
+
+for other tracks, change here:
+
+    function loadAndPlayAudio(file, loop = true, fadeIn = false, callback, volume = -12)
     
-**4. Upload your images**
+**5. Upload your images**
 
 To upload your own group image, simply swap the image inside image folder. Note: please keep the name of your image as image1-4, following your group number.
 
-**5. Change the group name**
+**6. Change the group name***
 
 To change your group project name, navigate to index.html, find the navigation buttons. As an example, if you want to change 'group1' to 'yuan ling street', modify it as below;
 
@@ -54,6 +73,7 @@ after:
         <div class="group-content">yuan ling street</div>
         
 
+## Testing Page Guide ##
 
 
 © Hao ZHENG, Marcel SAGESSER, SUSTech School of Design, 2024
