@@ -80,6 +80,24 @@ The testing page provides a comprehensive overview of how your project will soun
 1. Use WASD on your keyboard to move the red dot.
 2. Use the add button to create a new square, and when holding the square and press delete on your keyboard, the selected square will be deleted. Squares can be drag and moved with mouse.
 3. Press 'p' or 'P' on your keyboard to print the geo location of all the squares, which you could use to set the range in playFiles accordingly.
+4. To test with your sound files, update the file name at top: 
+    let tracks = {
+        "location1": "static/audio/group1/group1_track1.mp3",
+        "location2": "static/audio/group1/group1_track2.mp3",
+        "location3": "static/audio/group1/group1_track3.mp3",
+        "location4": "static/audio/group1/group1_track4.mp3",
+        "location5": "static/audio/group1/group1_track5.mp3",
+        "location6": "static/audio/group1/group1_track6.mp3"
+    };
+
+    and in the startBackgroundTrack() function:
+    
+    function startBackgroundTrack() {
+        backgroundTrack = new Tone.Player({
+            url: 'static/audio/group1/group1_background1.mp3',
+            // rest of the code...
+        })
+    }
 
 
 © Hao ZHENG, Marcel SAGESSER, SUSTech School of Design, 2024
