@@ -21,12 +21,12 @@ document.addEventListener('DOMContentLoaded', function () {
     let isPlaying = false;
     let backgroundTrack = null;
     let tracks = {
-        "location1": "static/audio/track1.mp3",
-        "location2": "static/audio/track2.mp3",
-        "location3": "static/audio/track3.mp3",
-        "location4": "static/audio/track4.mp3",
-        "location5": "static/audio/track5.mp3",
-        "location6": "static/audio/track6.mp3"
+        "location1": "static/audio/group1/group1_track1.mp3",
+        "location2": "static/audio/group1/group1_track2.mp3",
+        "location3": "static/audio/group1/group1_track3.mp3",
+        "location4": "static/audio/group1/group1_track4.mp3",
+        "location5": "static/audio/group1/group1_track5.mp3",
+        "location6": "static/audio/group1/group1_track6.mp3"
     };
     let trackPlayers = {}; // to keep track of all playing tracks
     let playingSquares = [];
@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function startBackgroundTrack() {
         backgroundTrack = new Tone.Player({
-            url: 'static/audio/background1.mp3',
+            url: 'static/audio/group1/group1_background1.mp3',
             loop: true,
             autostart: true,
             volume: backgroundVolume
