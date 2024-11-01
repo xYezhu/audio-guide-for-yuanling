@@ -42,7 +42,7 @@ To adjust the fade in and fade out of your tracks, navigate to the top of playFi
 To adjust the background track volume and other track volume, update the number in functions below (inside playFiles):
 
     function startBackgroundTrack() {
-        const backgroundFile = "static/audio/background1.mp3";
+        const backgroundFile = "static/audio/group1/group1_background1.mp3";
         loadAndPlayAudio(backgroundFile, true, true, function(player) {
             backgroundTrack = player;
             console.log("background track started.");
@@ -100,6 +100,9 @@ The testing page provides a comprehensive overview of how your project will soun
             })
         }
 
+### To Do ###
+
+1. Two versions of tracks, have a button to switch between chinese and english version of voices.
+2. Dynamic background track volume: background track volume goes up when no front tracks are playing.
 
 © Hao ZHENG, Marcel SAGESSER, SUSTech School of Design, 2024
-
