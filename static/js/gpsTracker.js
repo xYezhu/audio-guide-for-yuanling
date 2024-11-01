@@ -53,8 +53,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (latitude !== undefined && longitude !== undefined) {
                     p.textSize(45);
                     p.fill('#34495e');
-                    p.text(`latitude: ${latitude.toFixed(4)}`, 10, p.height * 0.2);
-                    p.text(`longitude: ${longitude.toFixed(4)}`, 10, p.height * 0.4);
+                    const latDirection = latitude >= 0 ? 'N' : 'S';
+                    const lonDirection = longitude >= 0 ? 'E' : 'W';
+                    
+                    const formattedLatitude = `${Math.abs(latitude).toFixed(4)}° ${latDirection}`;
+                    const formattedLongitude = `${Math.abs(longitude).toFixed(4)}° ${lonDirection}`;
+                    p.text(`${formattedLatitude}, ${formattedLongitude}`, 10, p.height * 0.2);
                 } else {
                     p.text('waiting for GPS data...', 10, p.height * 0.25);
                 }

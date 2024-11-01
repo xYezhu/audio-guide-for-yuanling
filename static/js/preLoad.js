@@ -42,10 +42,10 @@ function startPreloading() {
             // add more below...
 
             // background track
-            "static/audio/background1.mp3",
-            "static/audio/background2.mp3",
-            "static/audio/background3.mp3",
-            "static/audio/background4.mp3"
+            "static/audio/group1/group1_background1.mp3",
+            "static/audio/group2/group2_background2.mp3",
+            "static/audio/group3/group3_background3.mp3",
+            "static/audio/group4/group4_background4.mp3"
 
         ];
 
