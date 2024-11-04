@@ -7,7 +7,9 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tone@14.7.39/build/Tone.js"></script>
+    <script src="static/js/langSwitch.js" defer></script>
 </head>
+<body data-page="group1">
 <body>
 
     <img src="static/images/return.png" alt="back to home" class="back-button" onclick="window.location.href='index.html'">
@@ -20,6 +22,11 @@
             <div id="textDisplay2" class="text-display">Name 2</div>
             <div id="textDisplay3" class="text-display">Name 3</div>
         </div>
+
+        <button id="languageToggleButton">
+            <img id="languageIcon" src="static/images/switchEN.png" alt="Language Icon" class="language-image">
+        </button>
+
         <!-- play and stop buttons -->
         <div class="control-buttons">
             <img id="playButton" src="static/images/playButton.png" alt="play" class="play-button">

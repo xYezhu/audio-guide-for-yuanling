@@ -39,6 +39,22 @@ button {
     margin-top: 0;
 }
 
+#languageToggleButton {
+    display: flex;
+    cursor: pointer;
+    border: none; 
+    background: none;
+    position: fixed;
+    top: 5%; 
+    right: 10%; 
+    background: none;
+}
+
+.language-image{
+    width: 6vh;
+}
+
+
 .control-buttons {
     display: flex;
     align-items: center;  /* align images vertically */

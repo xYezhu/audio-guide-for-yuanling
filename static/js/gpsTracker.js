@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const formattedLongitude = `${Math.abs(longitude).toFixed(4)}° ${lonDirection}`;
                     p.text(`${formattedLatitude}, ${formattedLongitude}`, p.windowWidth * 0.02, p.height * 0.05);
                 } else {
-                    p.text('waiting for GPS data...', 10, p.height * 0.25);
+                    p.text('waiting for GPS data...', 10, p.height * 0.05);
                 }
             };
 
@@ -82,6 +82,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // error handling function
             function showError(error) {
                 let errorMessage;
+                p.textSize(window.innerHeight * 0.03);
+                p.fill('#34495e');
                 switch (error.code) {
                     case error.PERMISSION_DENIED:
                         errorMessage = 'geolocation permission denied. please allow location access.';

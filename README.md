@@ -111,9 +111,12 @@ The testing page provides a comprehensive overview of how your project will soun
 
 ### To Do ###
 
-1. Two versions of tracks, have a button to switch between chinese and english version of voices.
+
+~~1. Two versions of tracks, have a button to switch between chinese and english version of voices.~~
+
 2. Dynamic background track volume: background track volume goes up when no front tracks are playing.
 3. Have four buttons on the testing page to switch between 4 groups.
+
 ~~4. Update group page UI design.~~
 
 
