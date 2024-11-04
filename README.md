@@ -56,11 +56,11 @@ for other tracks, change here:
     
 **5. Upload your images**
 
-To upload your own group image, simply swap the image inside image folder. Note: please keep the name of your image as image1-4, following your group number.
+To upload your own group image, simply swap the image inside image folder. Note: please keep the name of your image as image1-4, following your group number. In the index page, the image is group1_image1, in your own group page, it's group1_image2.
 
-**6. Change the group name***
+**6. Update the group name and your names***
 
-To change your group project name, navigate to index.html, find the navigation buttons. As an example, if you want to change 'group1' to 'yuan ling street', modify it as below;
+To update your group project name, navigate to index.html, find the navigation buttons. As an example, if you want to change 'group1' to 'yuan ling street', modify it as below;
 
 before:
 
@@ -71,6 +71,15 @@ before:
 after:
 
         <div class="group-content">yuan ling street</div>
+
+After that, go to your group's html, for instance, in group1.html, change the text below:
+
+        <div id="controls">
+        <h1>group 1</h1>
+        <div class="text-container">
+            <div id="textDisplay1" class="text-display">Name 1</div>
+            <div id="textDisplay2" class="text-display">Name 2</div>
+            <div id="textDisplay3" class="text-display">Name 3</div>
         
 
 ### Testing Page Guide ###
@@ -105,7 +114,7 @@ The testing page provides a comprehensive overview of how your project will soun
 1. Two versions of tracks, have a button to switch between chinese and english version of voices.
 2. Dynamic background track volume: background track volume goes up when no front tracks are playing.
 3. Have four buttons on the testing page to switch between 4 groups.
-4. Update group page UI design.
+~~4. Update group page UI design.~~
 
 
 © Hao ZHENG, Marcel SAGESSER, SUSTech School of Design, 2024
