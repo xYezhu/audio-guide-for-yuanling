@@ -57,10 +57,8 @@ const languageData = {
         },
         group3: {
             texts: {
-                title: "group1",
-                textDisplay1: "Name 1",
-                textDisplay2: "Name 2",
-                textDisplay3: "Name 3",
+                title: "Childish Shenzhen",
+                textDisplay1: "Xu Yueqian",
                 locationInfo: "Location information is unavailable.",
                 footerText: "© Sound Studies Group, SUSTech, 2024",
             },
@@ -174,10 +172,8 @@ const languageData = {
         },
         group3: {
             texts: {
-                title: "第三组",
-                textDisplay1: "组员1",
-                textDisplay2: "组员2",
-                textDisplay3: "组员3",
+                title: "童真深圳",
+                textDisplay1: "许跃骞",
                 locationInfo: "Location information is unavailable.",
                 footerText: "© 声音研究科研组, SUSTech, 2024", 
             },
